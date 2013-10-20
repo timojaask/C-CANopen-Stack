@@ -1,21 +1,21 @@
 //
-//  can_message.h
+//  od_object.h
 //  CCanOpenStack
 //
 //  Created by Timo Jääskeläinen on 20.10.2013.
 //  Copyright (c) 2013 Timo Jääskeläinen. All rights reserved.
 //
 
-#ifndef CCanOpenStack_can_message_h
-#define CCanOpenStack_can_message_h
+#ifndef CCanOpenStack_od_object_h
+#define CCanOpenStack_od_object_h
 
 #include <stdint.h>
 
 /***************************** Global Definitions ****************************/
 typedef struct {
-    uint16_t id;
-    uint8_t data_len;
+    uint16_t index;
+    uint8_t sub_index;
     uint32_t data;
-} can_message;
+} od_object;
 
 #endif

@@ -1,15 +1,15 @@
 //
-//  test_can_bus.h
+//  test_od.h
 //  CCanOpenStack
 //
-//  Created by Timo Jääskeläinen on 20.10.2013.
+//  Created by Timo Jääskeläinen on 21.10.2013.
 //  Copyright (c) 2013 Timo Jääskeläinen. All rights reserved.
 //
 
-#ifndef CCanOpenStack_test_can_bus_h
-#define CCanOpenStack_test_can_bus_h
+#ifndef CCanOpenStack_test_od_h
+#define CCanOpenStack_test_od_h
 
 /***************************** Global Prototypes *****************************/
-extern int test_can_bus_run(void);
+extern int test_od_run(void);
 
 #endif

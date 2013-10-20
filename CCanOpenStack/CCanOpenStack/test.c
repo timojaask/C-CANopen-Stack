@@ -7,9 +7,18 @@
 //
 
 #include "test.h"
+#include "log.h"
 #include "test_can_bus.h"
+#include "test_od.h"
 
 /****************************** Global Functions *****************************/
 extern void test_run_all_tests(void) {
-    test_can_bus_run();
+    int error = 0;
+    error |= test_can_bus_run();
+    error |= test_od_run();
+    if (!error) {
+        log_write_ln("test: ALL OK");
+    } else {
+        log_write_ln("test: ERRORS");
+    }
 }

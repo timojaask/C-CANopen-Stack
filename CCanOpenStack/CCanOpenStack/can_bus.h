@@ -13,6 +13,6 @@
 
 /***************************** Global Prototypes *****************************/
 extern void can_bus_send_message(can_message *message);
-extern void can_bus_register_message_received_handler(void (*handler_function)(can_message *message));
+extern int can_bus_register_message_received_handler(void (*handler_function)(can_message *message));
 
 #endif

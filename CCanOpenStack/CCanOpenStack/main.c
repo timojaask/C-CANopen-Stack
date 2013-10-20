@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Timo Jääskeläinen. All rights reserved.
 //
 
-#include <stdio.h>
 #include "log.h"
 #include "test.h"
 

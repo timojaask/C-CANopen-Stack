@@ -7,12 +7,17 @@
 //
 
 #include <stdio.h>
+#include "log.h"
+#include "test.h"
 
+/****************************** Local Prototypes *****************************/
+
+/****************************** Global Functions *****************************/
 int main(int argc, const char * argv[])
 {
-
-    // insert code here...
-    printf("Hello, World!\n");
+    test_run_all_tests();
+    log_write_ln("main: done");
     return 0;
 }
 
+/****************************** Local Functions ******************************/

@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		2578ACB5181463F50010C2D2 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 2578ACB4181463F50010C2D2 /* main.c */; };
 		2578ACB7181463F50010C2D2 /* CCanOpenStack.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2578ACB6181463F50010C2D2 /* CCanOpenStack.1 */; };
+		2578ACC11814657F0010C2D2 /* can_bus.c in Sources */ = {isa = PBXBuildFile; fileRef = 2578ACC01814657F0010C2D2 /* can_bus.c */; };
+		2578ACC518146B0B0010C2D2 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = 2578ACC418146B0B0010C2D2 /* log.c */; };
+		2578ACC9181470560010C2D2 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 2578ACC8181470560010C2D2 /* test.c */; };
+		2578ACCC181470D00010C2D2 /* test_can_bus.c in Sources */ = {isa = PBXBuildFile; fileRef = 2578ACCB181470D00010C2D2 /* test_can_bus.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +32,15 @@
 		2578ACB1181463F50010C2D2 /* CCanOpenStack */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CCanOpenStack; sourceTree = BUILT_PRODUCTS_DIR; };
 		2578ACB4181463F50010C2D2 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		2578ACB6181463F50010C2D2 /* CCanOpenStack.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CCanOpenStack.1; sourceTree = "<group>"; };
+		2578ACBE1814646F0010C2D2 /* can_message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = can_message.h; sourceTree = "<group>"; };
+		2578ACBF181465490010C2D2 /* can_bus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = can_bus.h; sourceTree = "<group>"; };
+		2578ACC01814657F0010C2D2 /* can_bus.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = can_bus.c; sourceTree = "<group>"; };
+		2578ACC3181469C30010C2D2 /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
+		2578ACC418146B0B0010C2D2 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = log.c; sourceTree = "<group>"; };
+		2578ACC71814702D0010C2D2 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		2578ACC8181470560010C2D2 /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
+		2578ACCA1814707A0010C2D2 /* test_can_bus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_can_bus.h; sourceTree = "<group>"; };
+		2578ACCB181470D00010C2D2 /* test_can_bus.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_can_bus.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,10 +73,43 @@
 		2578ACB3181463F50010C2D2 /* CCanOpenStack */ = {
 			isa = PBXGroup;
 			children = (
+				2578ACC61814701C0010C2D2 /* test */,
+				2578ACC2181469B20010C2D2 /* log */,
+				2578ACBD181464650010C2D2 /* can */,
 				2578ACB4181463F50010C2D2 /* main.c */,
 				2578ACB6181463F50010C2D2 /* CCanOpenStack.1 */,
 			);
 			path = CCanOpenStack;
+			sourceTree = "<group>";
+		};
+		2578ACBD181464650010C2D2 /* can */ = {
+			isa = PBXGroup;
+			children = (
+				2578ACBE1814646F0010C2D2 /* can_message.h */,
+				2578ACBF181465490010C2D2 /* can_bus.h */,
+				2578ACC01814657F0010C2D2 /* can_bus.c */,
+			);
+			name = can;
+			sourceTree = "<group>";
+		};
+		2578ACC2181469B20010C2D2 /* log */ = {
+			isa = PBXGroup;
+			children = (
+				2578ACC3181469C30010C2D2 /* log.h */,
+				2578ACC418146B0B0010C2D2 /* log.c */,
+			);
+			name = log;
+			sourceTree = "<group>";
+		};
+		2578ACC61814701C0010C2D2 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				2578ACC71814702D0010C2D2 /* test.h */,
+				2578ACC8181470560010C2D2 /* test.c */,
+				2578ACCA1814707A0010C2D2 /* test_can_bus.h */,
+				2578ACCB181470D00010C2D2 /* test_can_bus.c */,
+			);
+			name = test;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,7 +163,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2578ACCC181470D00010C2D2 /* test_can_bus.c in Sources */,
+				2578ACC518146B0B0010C2D2 /* log.c in Sources */,
 				2578ACB5181463F50010C2D2 /* main.c in Sources */,
+				2578ACC11814657F0010C2D2 /* can_bus.c in Sources */,
+				2578ACC9181470560010C2D2 /* test.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -53,6 +53,9 @@ static void test_message_received_handler1(can_message *message) {
         error = 1;
         log_write_ln("test_can_bus: message received handler 1: wrong data, id:%Xh, len:%d, data:[%Xh]", message->id, message->data_len, message->data);
     }
+    if (!error) {
+        log_write_ln("test_can_bus: receive 1 OK id:%Xh, len:%d, data:[%Xh]", message->id, message->data_len, message->data);
+    }
 }
 static void test_message_received_handler2(can_message *message) {
     if (message->id != next_id) {
@@ -66,5 +69,8 @@ static void test_message_received_handler2(can_message *message) {
     if (message->data != next_data) {
         error = 1;
         log_write_ln("test_can_bus: message received handler 2: wrong data, id:%Xh, len:%d, data:[%Xh]", message->id, message->data_len, message->data);
+    }
+    if (!error) {
+        log_write_ln("test_can_bus: receive 2 OK id:%Xh, len:%d, data:[%Xh]", message->id, message->data_len, message->data);
     }
 }

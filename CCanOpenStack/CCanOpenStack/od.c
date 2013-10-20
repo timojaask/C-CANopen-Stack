@@ -10,22 +10,14 @@
 #include "log.h"
 
 /****************************** Local Variables ******************************/
-static od_object *objects;
-static int num_objects;
 
 /****************************** Global Functions *****************************/
-extern void od_init(od_object *od_objects, int num_od_objects) {
-    objects = od_objects;
-    num_objects = num_od_objects;
-    log_write_ln("od: initialized with %d objects", num_objects);
-}
-
-extern od_result od_read(uint16_t index, uint8_t sub_index, uint32_t *data) {
+extern od_result od_read(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t *data) {
     od_result result = OD_RESULT_OK;
     int object_found = 0;
-    for (int i = 0; i < num_objects; i++) {
-        if (objects[i].index == index && objects[i].sub_index == sub_index) {
-            *data = objects[i].data;
+    for (int i = 0; i < od->num_objects; i++) {
+        if (od->objects[i].index == index && od->objects[i].sub_index == sub_index) {
+            *data = od->objects[i].data;
             object_found = 1;
             break;
         }
@@ -37,12 +29,12 @@ extern od_result od_read(uint16_t index, uint8_t sub_index, uint32_t *data) {
     return result;
 }
 
-extern od_result od_write(uint16_t index, uint8_t sub_index, uint32_t data) {
+extern od_result od_write(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t data) {
     od_result result = OD_RESULT_OK;
     int object_found = 0;
-    for (int i = 0; i < num_objects; i++) {
-        if (objects[i].index == index && objects[i].sub_index == sub_index) {
-            objects[i].data = data;
+    for (int i = 0; i < od->num_objects; i++) {
+        if (od->objects[i].index == index && od->objects[i].sub_index == sub_index) {
+            od->objects[i].data = data;
             object_found = 1;
             break;
         }

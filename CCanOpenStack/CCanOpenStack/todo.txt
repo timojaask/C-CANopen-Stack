@@ -1,0 +1,7 @@
+TODO:
+
+--------------------------------------------------------------------------------------
+DONE:
+Create a CANopen node structure that holds object dictionary.
+Remove objects structure array from od.c, and instead pass a pointer to each od.c function, so
+that they could be used with any object dictionary from any node.

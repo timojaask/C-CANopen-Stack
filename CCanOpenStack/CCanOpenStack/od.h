@@ -18,9 +18,13 @@ typedef enum {
     OD_RESULT_OBJECT_NOT_FOUND
 } od_result;
 
+typedef struct {
+    od_object *objects;
+    int num_objects;
+} object_dictionary;
+
 /***************************** Global Prototypes *****************************/
-extern void od_init(od_object *od_objects, int num_od_objects);
-extern od_result od_read(uint16_t index, uint8_t sub_index, uint32_t *data);
-extern od_result od_write(uint16_t index, uint8_t sub_index, uint32_t data);
+extern od_result od_read(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t *data);
+extern od_result od_write(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t data);
 
 #endif

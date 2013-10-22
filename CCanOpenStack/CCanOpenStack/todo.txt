@@ -1,16 +1,14 @@
 TODO:
-- Create functions that create and parse SDO messages
-  + Add SDO abort codes enum
-  + Add SDO client abort transfer message test
-  + Add tests for server SDO messages
-- Somehow create and SDO server - one with OD and listening to CAN bus for SDO message and responsds
-//- Create functions that handle SDO interaction
-//- Create a test that tests SDO interaction by creating "nodes", attaching them to can_bus and sending SDO requests from master to slaves.
 - Create a test that uses nodes that can send and receive PDO messages
 - Create a test that uses nodes that support PDO mapping
 - Create a blueprint for default object dictionary
 
 --------------------------------------------------------------------------------------
 DONE:
+- Create functions that create and parse SDO messages
+  + Add SDO abort codes enum
+  + Add SDO client abort transfer message test
+  + Add tests for server SDO messages
+- Somehow create and SDO server - one with OD and listening to CAN bus for SDO message and responsds
 - Create a CANopen node structure that holds object dictionary.
 - Remove objects structure array from od.c, and instead pass a pointer to each od.c function, so that they could be used with any object dictionary from any node.

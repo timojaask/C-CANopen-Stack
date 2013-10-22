@@ -17,6 +17,7 @@
 
 /***************************** Local Definitions *****************************/
 #define RSDO_BASE 0x580
+
 /****************************** Local Variables ******************************/
 static int error = 0;
 static uint8_t test_running = 0;
@@ -30,17 +31,19 @@ static od_object od_objects[] = {
     {0x2000, 2, 20002},
     {0x2000, 3, 20003},
 };
-can_message message;
+static can_message message;
 static sdo_server_command expected_response_command;
 static uint16_t expected_index;
 static uint8_t expected_sub_index;
 static uint32_t expected_data;
+
 /****************************** Local Prototypes *****************************/
 static void send_upload_request(uint16_t index, uint8_t sub_index, uint32_t data);
 static void send_download_request(uint16_t index, uint8_t sub_index, uint32_t data);
 static void message_received_handler(can_message *message);
 static void parse_upload_response(can_message *message);
 static void parse_download_response(can_message *message);
+
 /****************************** Global Functions *****************************/
 extern int test_sdo_server_run(void) {
     test_running = 1;
@@ -119,28 +122,30 @@ static void send_download_request(uint16_t index, uint8_t sub_index, uint32_t da
 }
 
 static void message_received_handler(can_message *message) {
-    if (message->id == RSDO_BASE + node.node_id) {
-        sdo_server_command cmd = sdo_get_server_command(message);
-        if (cmd == expected_response_command) {
-            switch (cmd) {
-                case sdo_command_server_upload_init:
-                    parse_upload_response(message);
-                    break;
-                case sdo_command_server_download_init:
-                    parse_download_response(message);
-                    break;
-                default:
-                    log_write_ln("test_sdo_server: ERROR: test error - unsupported command, even though it matches expected");
-                    error = 1;
-                    break;
+    if (test_running) {
+        if (message->id == RSDO_BASE + node.node_id) {
+            sdo_server_command cmd = sdo_get_server_command(message);
+            if (cmd == expected_response_command) {
+                switch (cmd) {
+                    case sdo_command_server_upload_init:
+                        parse_upload_response(message);
+                        break;
+                    case sdo_command_server_download_init:
+                        parse_download_response(message);
+                        break;
+                    default:
+                        log_write_ln("test_sdo_server: ERROR: test error - unsupported command, even though it matches expected");
+                        error = 1;
+                        break;
+                }
+            } else {
+                log_write_ln("test_sdo_server: ERROR: wrong response command");
+                error = 1;
             }
         } else {
-            log_write_ln("test_sdo_server: ERROR: wrong response command");
+            log_write_ln("test_sdo_server: ERROR: wrong message COB ID: %02Xh, expected: %02Xh", message->id, (RSDO_BASE + node.node_id));
             error = 1;
         }
-    } else {
-        log_write_ln("test_sdo_server: ERROR: wrong message COB ID: %02Xh, expected: %02Xh", message->id, (RSDO_BASE + node.node_id));
-        error = 1;
     }
 }
 static void parse_download_response(can_message *message) {

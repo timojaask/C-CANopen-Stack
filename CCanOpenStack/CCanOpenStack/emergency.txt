@@ -1,0 +1,53 @@
+The emergency message sent by an individual node has a CAN identifier of 80h plus the Node ID.
+
+Contents:
+
+bytes 0 - 1:
+ - error code
+ 
+byte 2:
+ - error register
+
+bytes 3 - 7:
+ - manufacturer specific error code
+ 
+ 
+Detailed explanation:
+
+- Error Code: 2-byte error code – see Table below
+- Error Register: copy of the 1-byte error register at [1001h,00h]
+- Manufacturer Specific Error Field: Up to 5 bytes for manufacturer specific error codes
+
+Error codes:
+00xx Error Reset or No Error
+10xx Generic Error
+20xx Current
+21xx Current, device input side
+22xx Current inside the device
+23xx Current, device output side
+30xx Voltage
+31xx Mains Voltage
+32xx Voltage inside the device
+33xx Output Voltage
+40xx Temperature
+41xx Ambient Temperature
+42xx Device Temperature
+50xx Device Hardware
+60xx Device Software
+61xx Internal Software
+62xx User Software
+63xx Data Set
+70xx Additional Modules
+80xx Monitoring
+81xx Communication
+8110 CAN Overrun (Objects Lost)
+8120 CAN in Passive Error Mode
+8130 Life Guard Error or Heartbeat Error
+8140 Recovered from Bus Off
+8150 Transmit COB ID Collision
+82xx Protocol Error
+8210 PDO not processed due to length of error
+8220 PDO length exceeded
+90xx External Error
+F0xx Additional Functions
+FFxx Device Specific

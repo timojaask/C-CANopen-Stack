@@ -1,0 +1,47 @@
+NMT:
+COB-ID base is 0.
+
+NMT states:
+- (Power-On/Reset -> Initialization)
+- Initialization
+- Pre-Operational
+- Operational
+- Stopped
+- (Reset Node -> Power-On/Reset)
+- (Reset Communication -> Initialization)
+
+How it happens:
+Device boots up, goes into Initialization.
+Initializes entire application and CAN/CANopen interfaces.
+Transmits boot up message.
+Switches to pre-operational.
+---
+Master node can tell nodes to switch to any of three modes: pre-operational, operational and stopped.
+Master node can also tell nodes to "Reset communication" or "Reset node". After reset node sends boot up message and stays in pre-operational.
+
+
+Communication that can happen during different NMT states:
+- Initialization: Boot-up message
+- Pre-operational: SDO, EMCY, SYNC/TIME, heartbeat/nodeguard, NMT
+- Operational:     SDO, EMCY, SYNC/TIME, heartbeat/nodeguard, NMT, PDO
+- Stopped: heartbeat/nodeguard, NMT
+
+Basically operational state differs from pre-operational only by PDO capability.
+
+Node auto-start:
+Object Dictionary entry 1F80 is implemented to report that the node is auto- starting
+
+
+-------------------
+NMT message structure:
+2 bytes
+byte 0: command:
+ - 1 = Operational
+ - 2 = Stopped
+ - 128 = Pre-operational
+ - 129 = Reset Node
+ - 130 = Reset Communication
+byte 1: destination:
+ - 0 (broadcast)
+ - node ID
+ 

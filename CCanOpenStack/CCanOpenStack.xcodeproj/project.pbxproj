@@ -38,6 +38,9 @@
 /* Begin PBXFileReference section */
 		25760ACA1816FCD80013E412 /* test_sdo_server.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdo_server.h; sourceTree = "<group>"; };
 		25760ACB1816FCFD0013E412 /* test_sdo_server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdo_server.c; sourceTree = "<group>"; };
+		25760ACD18170FB50013E412 /* nmt.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nmt.txt; sourceTree = "<group>"; };
+		25760ACE181713590013E412 /* heartbeat.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = heartbeat.txt; sourceTree = "<group>"; };
+		25760ACF181713C00013E412 /* emergency.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emergency.txt; sourceTree = "<group>"; };
 		2578ACB1181463F50010C2D2 /* CCanOpenStack */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CCanOpenStack; sourceTree = BUILT_PRODUCTS_DIR; };
 		2578ACB4181463F50010C2D2 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		2578ACB6181463F50010C2D2 /* CCanOpenStack.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CCanOpenStack.1; sourceTree = "<group>"; };
@@ -99,7 +102,7 @@
 		2578ACB3181463F50010C2D2 /* CCanOpenStack */ = {
 			isa = PBXGroup;
 			children = (
-				2578ACC61814701C0010C2D2 /* test */,
+				2578ACC61814701C0010C2D2 /* tests */,
 				2578ACCD181476EB0010C2D2 /* can_open */,
 				2578ACC2181469B20010C2D2 /* log */,
 				2578ACBD181464650010C2D2 /* can */,
@@ -108,6 +111,9 @@
 				2578ACDD1814805B0010C2D2 /* comments.txt */,
 				2578ACDE181482C20010C2D2 /* utils.h */,
 				2578ACDF18148AE30010C2D2 /* todo.txt */,
+				25760ACD18170FB50013E412 /* nmt.txt */,
+				25760ACE181713590013E412 /* heartbeat.txt */,
+				25760ACF181713C00013E412 /* emergency.txt */,
 			);
 			path = CCanOpenStack;
 			sourceTree = "<group>";
@@ -131,7 +137,7 @@
 			name = log;
 			sourceTree = "<group>";
 		};
-		2578ACC61814701C0010C2D2 /* test */ = {
+		2578ACC61814701C0010C2D2 /* tests */ = {
 			isa = PBXGroup;
 			children = (
 				2578ACC71814702D0010C2D2 /* test.h */,
@@ -147,7 +153,7 @@
 				25760ACA1816FCD80013E412 /* test_sdo_server.h */,
 				25760ACB1816FCFD0013E412 /* test_sdo_server.c */,
 			);
-			name = test;
+			name = tests;
 			sourceTree = "<group>";
 		};
 		2578ACCD181476EB0010C2D2 /* can_open */ = {

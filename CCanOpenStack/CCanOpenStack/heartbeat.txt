@@ -1,0 +1,8 @@
+The heartbeat message sent by an individual node has the CAN message identifier 700h plus the Node ID. It only contains one byte showing the current NMT state of that node.
+
+Valid values for the byte:
+
+0 = Boot-up
+4 = Stopped
+5 = Operational
+127 = Pre-operational

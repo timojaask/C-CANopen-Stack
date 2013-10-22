@@ -10,13 +10,14 @@
 #define CCanOpenStack_sdo_server_h
 
 #include "can_message.h"
+#include "co_node.h"
 #include "od.h"
 
 /***************************** Global Definitions ****************************/
 
 /***************************** Global Prototypes *****************************/
 
-extern void sdo_server_process_request(can_message *message, object_dictionary *od);
+extern void sdo_server_process_request(can_message *message, co_node *node);
 
 
 #endif

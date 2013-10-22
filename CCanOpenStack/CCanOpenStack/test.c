@@ -11,6 +11,7 @@
 #include "test_can_bus.h"
 #include "test_od.h"
 #include "test_sdo.h"
+#include "test_sdo_server.h"
 
 /****************************** Global Functions *****************************/
 extern void test_run_all_tests(void) {
@@ -18,6 +19,7 @@ extern void test_run_all_tests(void) {
     error |= test_can_bus_run();
     error |= test_od_run();
     error |= test_sdo_run();
+    error |= test_sdo_server_run();
     if (!error) {
         log_write_ln("test: ALL OK");
     } else {

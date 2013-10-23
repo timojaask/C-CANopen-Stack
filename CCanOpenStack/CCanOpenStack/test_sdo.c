@@ -10,6 +10,8 @@
 #include "can_bus.h"
 #include "log.h"
 #include "sdo.h"
+#include "sdo_client.h"
+#include "sdo_server.h"
 #include "test_util.h"
 
 /***************************** Local Definitions *****************************/

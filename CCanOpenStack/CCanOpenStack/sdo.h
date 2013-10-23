@@ -62,12 +62,6 @@ typedef enum {
 } sdo_abort_code;
 
 /***************************** Global Prototypes *****************************/
-extern void sdo_message_expedited_download_request(can_message *message, uint16_t index, uint8_t sub_index, uint32_t data);
-extern void sdo_message_download_response(can_message *message, uint16_t index, uint8_t sub_index);
-extern void sdo_message_upload_request(can_message *message, uint16_t index, uint8_t sub_index);
-extern void sdo_message_expedited_upload_response(can_message *message, uint16_t index, uint8_t sub_index, uint32_t data);
-extern void sdo_message_server_abort_transfer(can_message *message, uint16_t index, uint8_t sub_index, uint32_t abort_code);
-extern void sdo_message_client_abort_transfer(can_message *message, uint16_t index, uint8_t sub_index, uint32_t abort_code);
 extern sdo_server_command sdo_get_server_command(can_message *message);
 extern sdo_client_command sdo_get_client_command(can_message *message);
 extern uint8_t sdo_get_expedited_bit(can_message *message);
@@ -76,5 +70,15 @@ extern int sdo_get_expedited_data_size(can_message *message);
 extern uint16_t sdo_get_index(can_message *message);
 extern uint8_t sdo_get_sub_index(can_message *message);
 extern uint32_t sdo_get_expedited_data(can_message *message);
+extern void sdo_set_message_abort_transfer_data(can_message *message, uint16_t index, uint8_t sub_index, uint32_t abort_code);
+extern void sdo_set_expedited_bit(can_message *message, uint8_t expedited);
+extern void sdo_set_size_indicated_bit(can_message *message, uint8_t size_indicated);
+/* Note: Also sets data size indicated bit */
+extern void sdo_set_expedited_data_size(can_message *message, int data_size);
+extern void sdo_set_index(can_message *message, uint16_t index);
+extern void sdo_set_sub_index(can_message *message, uint8_t sub_index);
+extern void sdo_set_expedited_data(can_message *message, uint32_t data);
+extern int get_sdo_command(can_message *message);
+extern void set_sdo_command(can_message *message, int sdo_command);
 
 #endif

@@ -13,6 +13,7 @@
 #include "od.h"
 #include "sdo.h"
 #include "sdo_server.h"
+#include "sdo_client.h"
 #include "utils.h"
 
 /***************************** Local Definitions *****************************/

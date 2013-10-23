@@ -36,6 +36,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		25140D5D181799E4009F2F4E /* nmt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nmt.h; sourceTree = "<group>"; };
+		25140D5E181799EE009F2F4E /* nmt_master.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nmt_master.h; sourceTree = "<group>"; };
+		25140D5F181799F6009F2F4E /* nmt_slave.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nmt_slave.h; sourceTree = "<group>"; };
 		25760ACA1816FCD80013E412 /* test_sdo_server.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdo_server.h; sourceTree = "<group>"; };
 		25760ACB1816FCFD0013E412 /* test_sdo_server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdo_server.c; sourceTree = "<group>"; };
 		25760ACD18170FB50013E412 /* nmt.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nmt.txt; sourceTree = "<group>"; };
@@ -167,6 +170,9 @@
 				2578ACE21815B2710010C2D2 /* sdo.c */,
 				2578ACEA1816E2A70010C2D2 /* sdo_server.h */,
 				2578ACEB1816E31B0010C2D2 /* sdo_server.c */,
+				25140D5D181799E4009F2F4E /* nmt.h */,
+				25140D5E181799EE009F2F4E /* nmt_master.h */,
+				25140D5F181799F6009F2F4E /* nmt_slave.h */,
 			);
 			name = can_open;
 			sourceTree = "<group>";

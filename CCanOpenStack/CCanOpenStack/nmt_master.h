@@ -9,6 +9,12 @@
 #ifndef CCanOpenStack_nmt_master_h
 #define CCanOpenStack_nmt_master_h
 
-// Ability to send NMT commands and process heartbeats of slaves
+#include <stdint.h>
+#include "can_message.h"
+#include "nmt.h"
+
+/***************************** Global Prototypes *****************************/
+extern void nmt_master_send_command(uint8_t node_id, nmt_command command);
+extern void nmt_master_process_heartbeat(can_message *message);
 
 #endif

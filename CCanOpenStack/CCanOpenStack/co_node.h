@@ -10,9 +10,11 @@
 #define CCanOpenStack_co_node_h
 
 #include "od.h"
+#include "nmt.h"
 
 typedef struct {
     uint8_t node_id;
+    nmt_state state;
     object_dictionary *od;
 } co_node;
 

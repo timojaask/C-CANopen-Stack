@@ -9,6 +9,10 @@
 #ifndef CCanOpenStack_nmt_slave_h
 #define CCanOpenStack_nmt_slave_h
 
-// Ability to read NMT commands and send heartbeats
+#include "can_message.h"
+
+/***************************** Global Prototypes *****************************/
+extern void nmt_slave_process_command(can_message *message);
+extern void nmt_slave_send_heartbeat(void);
 
 #endif

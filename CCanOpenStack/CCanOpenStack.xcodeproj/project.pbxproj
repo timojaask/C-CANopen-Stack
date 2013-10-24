@@ -50,6 +50,7 @@
 		25140D6718197132009F2F4E /* test_nmt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_nmt.h; sourceTree = "<group>"; };
 		25140D681819713A009F2F4E /* test_nmt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_nmt.c; sourceTree = "<group>"; };
 		25140D6A1819AE1C009F2F4E /* pdo_communication.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pdo_communication.txt; sourceTree = "<group>"; };
+		254140E91819CD73008A75C0 /* object_dictionary.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = object_dictionary.txt; sourceTree = "<group>"; };
 		25760ACA1816FCD80013E412 /* test_sdo_server.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdo_server.h; sourceTree = "<group>"; };
 		25760ACB1816FCFD0013E412 /* test_sdo_server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdo_server.c; sourceTree = "<group>"; };
 		25760ACD18170FB50013E412 /* nmt.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nmt.txt; sourceTree = "<group>"; };
@@ -129,6 +130,7 @@
 				25760ACE181713590013E412 /* heartbeat.txt */,
 				25760ACF181713C00013E412 /* emergency.txt */,
 				25140D6A1819AE1C009F2F4E /* pdo_communication.txt */,
+				254140E91819CD73008A75C0 /* object_dictionary.txt */,
 			);
 			path = CCanOpenStack;
 			sourceTree = "<group>";

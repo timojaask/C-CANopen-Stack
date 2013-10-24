@@ -1,0 +1,42 @@
+
+/* Minimum OD entries:
+ * 1000.00 : Device Type
+ *      00 : uint32, value: 0 (no device profile)
+ * 1001.00 : Error register
+ *      00 : uint8, value: 0 (no errors)
+ * 1008.00 : Device name
+ *      00 : uint32 (4-char string), value: XXXX (use define to specify)
+ * 1017.00 : Heartbeat producer time
+ *      00 : uint16, value: 0 (milliseconds. It's writable and can change any time)
+ * 1018.xx : Identity object
+ *      00 : NumEntries: uint8, value: 1
+ *      01 : Vendor ID: uint32, value: XXXXXX (use define to specify)
+ * 1200.xx : SDO server parameters
+ *      00 : NumEntries: uint8, value: 2
+ *      01 : RSDO COB ID: uint32, value: 0x600 + NodeId
+ *      02 : TSDO COB ID: uint32, value: 0x580 + NodeId
+ * 1400.xx : RPDO parameters
+ *      00 : NumEntries: uint8, value: 2
+ *      01 : RPDO COB ID: uint32, value: XXXX
+ *      02 : Transmission type: uint8, value: 0xFE (manufacturer specific)
+ * 1600.xx : RPDO mapping
+ *      00 : NumEntries: uint8, value: XX (depends on number of objects mapped into PDO)
+ *      01 : Mapping entry, uint32, value: 0xiiiissbb (index, subindex, num bits)
+ *      .. : --- || ---
+ *      64 : --- || ---
+ * 1800.xx : TPDO parameters
+ *      00 : NumEntries: uint8, value: ************
+ *      01 : TPDO COB ID: uint32, value: XXXX
+ *      02 : Transmision type: uint8, value: 0xFE (manufacturer specific)
+ *      03 : Inhibit time: uint16, value: 0 (100 micro seconds, minimum time between Tx)
+ *      04 : Reserved: uint8, value: -- (attempt to read or write should return abort)
+ *      05 : Event time: uint16, value: XXX (milliseconds)
+ * 1A00.xx : TPDO mapping
+ *      00 : NumEntries: uint8, value: XX (depends on number of objects mapped into PDO)
+ *      01 : Mapping entry, uint32, value: 0xiiiissbb (index, subindex, num bits)
+ *      .. : --- || ---
+ *      64 : --- || ---
+ * 1F80.00 : NMT startup
+ *      00 : uint32, value: xx (bit 2: 0 = auto-start, 1 = no auto start), either RO or RW
+ *
+ */

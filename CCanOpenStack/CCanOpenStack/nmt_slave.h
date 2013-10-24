@@ -13,6 +13,6 @@
 
 /***************************** Global Prototypes *****************************/
 extern void nmt_slave_process_command(can_message *message);
-extern void nmt_slave_send_heartbeat(void);
+extern void nmt_slave_send_heartbeat(uint8_t node_id);
 
 #endif

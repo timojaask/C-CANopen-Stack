@@ -6,6 +6,8 @@ TODO:
 - Create a test that uses nodes that support PDO mapping
 - Create a blueprint for default object dictionary
 - Object dictionary 0x1F80 NMT Start-up bit
+- Reset communication and reset device functions. Also add them to nmt_slave.c to be called when appropriated command is received.
+- Implement functions that set the "current_state" variable in nmt_slave.c.
 
 --------------------------------------------------------------------------------------
 DONE:

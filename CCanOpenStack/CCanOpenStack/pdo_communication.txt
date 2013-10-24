@@ -1,0 +1,9 @@
+The PDO trigger method for this project will be time driven triggering.
+This means that PDO messages will be transmitted after a centain period of time.
+Other possible trigger methods are:
+ - Event driven (change of state)
+ - Master polling
+ - Synchronized (group polling)
+ 
+Due to time constrains and also because time driven is mostly used in our company,
+only time driven communication will be implemented at this time.

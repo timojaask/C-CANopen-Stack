@@ -58,5 +58,11 @@ extern void nmt_master_process_heartbeat(can_message *message) {
         num_nodes++;
     }
 }
+extern int nmt_master_num_nodes(void) {
+    return num_nodes;
+}
+extern co_node *nmt_master_node_list(void) {
+    return nodes;
+}
 
 /****************************** Local Functions ******************************/

@@ -1,16 +1,18 @@
 TODO:
-- NMT processing
-- Transmit boot up message (transmitted after NMT initialization is finished, when going into NMT pre-operational)
-- Implement heartbeat
 - Create a test that uses nodes that can send and receive PDO messages
 - Create a test that uses nodes that support PDO mapping
 - Create a blueprint for default object dictionary
 - Object dictionary 0x1F80 NMT Start-up bit
 - Reset communication and reset device functions. Also add them to nmt_slave.c to be called when appropriated command is received.
 - Implement functions that set the "current_state" variable in nmt_slave.c.
+- Transmit boot up message (transmitted after NMT initialization is finished, when going into NMT pre-operational)
 
 --------------------------------------------------------------------------------------
 DONE:
+- Create NMT tests
+- Create node reset tests
+- NMT processing
+- Implement heartbeat
 - Create functions that create and parse SDO messages
   + Add SDO abort codes enum
   + Add SDO client abort transfer message test

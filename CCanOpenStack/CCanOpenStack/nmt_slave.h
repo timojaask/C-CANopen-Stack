@@ -10,9 +10,14 @@
 #define CCanOpenStack_nmt_slave_h
 
 #include "can_message.h"
+#include "co_node.h"
+#include "nmt.h"
 
 /***************************** Global Prototypes *****************************/
-extern void nmt_slave_process_command(can_message *message);
-extern void nmt_slave_send_heartbeat(uint8_t node_id);
+extern void nmt_slave_process_command(can_message *message, co_node *node);
+extern void nmt_slave_send_heartbeat(co_node *node);
+extern int nmt_slave_register_state_changed_handler(void (*handler_function)(nmt_state state));
+extern void nmt_slave_set_reset_communication_function(void (*function)(void));
+extern void nmt_slave_set_reset_node_function(void (*function)(void));
 
 #endif

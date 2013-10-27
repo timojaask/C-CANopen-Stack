@@ -1,5 +1,4 @@
 TODO:
-- Put all testing OD things in the same OD. Remove small ODs from test files and put all data into od_initialize.h
 - Add od_setup_sdo(node_id) and od_setup_t/rpdo(pdo_num, cob_id, inhibit, event) functions to set initial OD parameters for SDO and PDOs. Also add od_set_r/tpdo_mapping(pdo_num, pdo_mapping_param[ ], num_params) function that takes an array if mapping parameters and writes them into OD. These PDO related functions should return error if there are not enough PDO slots available in the dictionary and that if more is needed, they should be typed into od_initialize.h list.
 - RPDO testing is straight forward. Make a can message, send to RPDO function which should first see if RPDO is enabled and if so, then parse the message and write values into OD according to mapping. Then the test function should read back these values to see that they have been written correctly.
 - TPDO testing should work like NMT heartbeat test with tick count and the rest kind of like RPDO function but in reverse.
@@ -18,6 +17,7 @@ TODO:
 
 --------------------------------------------------------------------------------------
 DONE:
+- Put all testing OD things in the same OD. Remove small ODs from test files and put all data into od_initialize.h
 - NMT function that takes tick count and OD. Sends heartbeat. Test by manipulating tick count and calling the NMT function.
 - Create a blueprint for default object dictionary
 - Implement data types and access types

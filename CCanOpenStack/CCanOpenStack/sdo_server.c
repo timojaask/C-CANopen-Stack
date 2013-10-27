@@ -15,6 +15,7 @@
 #define TSDO_BASE 0x580
 
 /****************************** Local Variables ******************************/
+uint8_t message_data[8];
 
 /****************************** Local Prototypes *****************************/
 static void process_download_request(can_message *message, co_node *node);
@@ -118,6 +119,7 @@ static void process_upload_request(can_message *message, co_node *node) {
 }
 static void send_abort_message(uint16_t index, uint8_t sub_index, sdo_abort_code code, co_node *node) {
     can_message message;
+    message.data = message_data;
     sdo_message_server_abort_transfer(&message, index, sub_index, code);
     message.id = TSDO_BASE + node->node_id;
     can_bus_send_message(&message);

@@ -53,6 +53,7 @@ extern int test_sdo_run(void) {
     next_message.data_len = 8;
     next_message.data = msg_data;
     // Create and send various SDO messages
+    // Note: this test doesn't actually write to any real object dictionary
     test_download_request(0x2000, 1, 0x123456);
     test_download_request(0x2001, 9, 0x345);
     test_download_request(0xFF00, 0xF3, 0x9876);

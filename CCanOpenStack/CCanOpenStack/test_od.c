@@ -14,39 +14,7 @@
 /***************************** Local Definitions *****************************/
 
 /****************************** Local Variables ******************************/
-static od_object objects[] = {
-    // Copy the data types here:
-    {0x0001, 0, od_data_type_uint8, od_access_type_ro, 1}, // BOOL: 1 bit
-    {0x0002, 0, od_data_type_uint8, od_access_type_ro, 8}, // INT8: 8 bits
-    {0x0003, 0, od_data_type_uint8, od_access_type_ro, 16}, // INT16: 16 bits
-    {0x0004, 0, od_data_type_uint8, od_access_type_ro, 32}, // INT32: 32 bits
-    {0x0005, 0, od_data_type_uint8, od_access_type_ro, 8}, // UINT8: 8 bits
-    {0x0006, 0, od_data_type_uint8, od_access_type_ro, 16}, // UINT16: 16 bits
-    {0x0007, 0, od_data_type_uint8, od_access_type_ro, 32}, // UINT32: 32 bits
-    
-    {0x1000, 0, od_data_type_uint32, od_access_type_rw, 10000},
-    {0x1001, 0, od_data_type_uint32, od_access_type_rw, 10010},
-    {0x2000, 0, od_data_type_uint8, od_access_type_ro, 3},
-    {0x2000, 1, od_data_type_uint32, od_access_type_rw, 20001},
-    {0x2000, 2, od_data_type_uint32, od_access_type_rw, 20002},
-    {0x2000, 3, od_data_type_uint32, od_access_type_rw, 20003},
-    
-    // For testing access types
-    {0x2001, 0, od_data_type_uint8, od_access_type_ro, 1},
-    {0x2001, 1, od_data_type_uint32, od_access_type_ro, 20011},
-    {0x2001, 2, od_data_type_uint32, od_access_type_wo, 20012},
-    {0x2001, 3, od_data_type_uint32, od_access_type_const, 20013},
-    
-    // For testing data types
-    {0x2003, 0, od_data_type_uint8, od_access_type_ro, 1},
-    {0x2003, 1, od_data_type_bool, od_access_type_ro, 20031},
-    {0x2003, 2, od_data_type_int8, od_access_type_ro, 20032},
-    {0x2003, 3, od_data_type_int16, od_access_type_ro, 20033},
-    {0x2003, 4, od_data_type_int32, od_access_type_ro, 20034},
-    {0x2003, 5, od_data_type_uint8, od_access_type_ro, 20035},
-    {0x2003, 6, od_data_type_uint16, od_access_type_ro, 20036},
-    {0x2003, 7, od_data_type_uint32, od_access_type_ro, 20037},
-};
+static object_dictionary od;
 
 /****************************** Local Prototypes *****************************/
 static int test_read(object_dictionary *od, uint16_t index, uint8_t sub_index, int expected_result, uint32_t expected_value);
@@ -57,52 +25,42 @@ static int test_data_type(object_dictionary *od, uint16_t index, uint8_t sub_ind
 /****************************** Global Functions *****************************/
 extern int test_od_run(void) {
     int error = 0;
-    int num_objects = UTILS_ARRAY_SIZE(objects);
     
-    // Create an object dictionary to run tests on
-    object_dictionary dictionary = {
-        .objects = objects,
-        .num_objects = num_objects
-    };
-    object_dictionary *od = &dictionary;
-    
-    // Run tests on this object dictionary
+    od_initialize(&od);
     
     // Test reading
-    error |= test_read(od, 0x1000, 0, OD_RESULT_OK, 10000);
-    error |= test_read(od, 0x1001, 0, OD_RESULT_OK, 10010);
-    error |= test_read(od, 0x2000, 0, OD_RESULT_OK, 3);
-    error |= test_read(od, 0x2000, 1, OD_RESULT_OK, 20001);
-    error |= test_read(od, 0x2000, 2, OD_RESULT_OK, 20002);
-    error |= test_read(od, 0x2000, 3, OD_RESULT_OK, 20003);
+    error |= test_read(&od, 0x2000, 0, OD_RESULT_OK, 3);
+    error |= test_read(&od, 0x2000, 1, OD_RESULT_OK, 20001);
+    error |= test_read(&od, 0x2000, 2, OD_RESULT_OK, 20002);
+    error |= test_read(&od, 0x2000, 3, OD_RESULT_OK, 20003);
     
     // Test writing
-    error |= test_access(od, 0x2000, 1, od_access_type_rw);
-    error |= test_write(od, 0x2000, 1, OD_RESULT_OK, 1234);
-    error |= test_write(od, 0x2000, 2, OD_RESULT_OK, 9876);
-    error |= test_write(od, 0x2000, 3, OD_RESULT_OK, 0);
+    error |= test_access(&od, 0x2000, 1, od_access_type_rw);
+    error |= test_write(&od, 0x2000, 1, OD_RESULT_OK, 1234);
+    error |= test_write(&od, 0x2000, 2, OD_RESULT_OK, 9876);
+    error |= test_write(&od, 0x2000, 3, OD_RESULT_OK, 0);
     
     // Test read only access type
-    error |= test_access(od, 0x2001, 1, od_access_type_ro);
-    error |= test_write(od, 0x2001, 1, OD_RESULT_WRITING_READ_ONLY_OBJECT, 1234); // Try to write a read only object
-    error |= test_read(od, 0x2001, 1, OD_RESULT_OK, 20011); // Make sure it wasn't written (old value stayed)
+    error |= test_access(&od, 0x2001, 1, od_access_type_ro);
+    error |= test_write(&od, 0x2001, 1, OD_RESULT_WRITING_READ_ONLY_OBJECT, 1234); // Try to write a read only object
+    error |= test_read(&od, 0x2001, 1, OD_RESULT_OK, 20011); // Make sure it wasn't written (old value stayed)
     // Test write only access type
-    error |= test_access(od, 0x2001, 2, od_access_type_wo);
-    error |= test_read(od, 0x2001, 2, OD_RESULT_READING_WRITE_ONLY_OBJECT, 0); // Try to read a write only object
-    error |= test_write(od, 0x2001, 2, OD_RESULT_OK, 1234); // Write a write only object
+    error |= test_access(&od, 0x2001, 2, od_access_type_wo);
+    error |= test_read(&od, 0x2001, 2, OD_RESULT_READING_WRITE_ONLY_OBJECT, 0); // Try to read a write only object
+    error |= test_write(&od, 0x2001, 2, OD_RESULT_OK, 1234); // Write a write only object
     // Test constant access type
-    error |= test_access(od, 0x2001, 3, od_access_type_const);
-    error |= test_write(od, 0x2001, 3, OD_RESULT_WRITING_READ_ONLY_OBJECT, 1234); // Try to write a const object
-    error |= test_read(od, 0x2001, 3, OD_RESULT_OK, 20013); // Make sure it wasn't written (old value stayed)
+    error |= test_access(&od, 0x2001, 3, od_access_type_const);
+    error |= test_write(&od, 0x2001, 3, OD_RESULT_WRITING_READ_ONLY_OBJECT, 1234); // Try to write a const object
+    error |= test_read(&od, 0x2001, 3, OD_RESULT_OK, 20013); // Make sure it wasn't written (old value stayed)
     
     // Test data types
-    error |= test_data_type(od, 0x2003, 1, od_data_type_bool, 1);
-    error |= test_data_type(od, 0x2003, 2, od_data_type_int8, 8);
-    error |= test_data_type(od, 0x2003, 3, od_data_type_int16, 16);
-    error |= test_data_type(od, 0x2003, 4, od_data_type_int32, 32);
-    error |= test_data_type(od, 0x2003, 5, od_data_type_uint8, 8);
-    error |= test_data_type(od, 0x2003, 6, od_data_type_uint16, 16);
-    error |= test_data_type(od, 0x2003, 7, od_data_type_uint32, 32);
+    error |= test_data_type(&od, 0x2003, 1, od_data_type_bool, 1);
+    error |= test_data_type(&od, 0x2003, 2, od_data_type_int8, 8);
+    error |= test_data_type(&od, 0x2003, 3, od_data_type_int16, 16);
+    error |= test_data_type(&od, 0x2003, 4, od_data_type_int32, 32);
+    error |= test_data_type(&od, 0x2003, 5, od_data_type_uint8, 8);
+    error |= test_data_type(&od, 0x2003, 6, od_data_type_uint16, 16);
+    error |= test_data_type(&od, 0x2003, 7, od_data_type_uint32, 32);
     
     return error;
 }

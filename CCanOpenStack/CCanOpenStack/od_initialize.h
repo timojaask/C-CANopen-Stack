@@ -152,6 +152,34 @@ od_object od_objects[] = {
     {0x1F80, 0, od_data_type_uint32, od_access_type_ro, (1 << 2)}, // bit 2: 0 = auto start, 1 = no auto start)
     
     // Manufacturer specific goes here
+    
+    // For testing read and write
+    {0x2000, 0, od_data_type_uint8, od_access_type_ro, 3},
+    {0x2000, 1, od_data_type_uint32, od_access_type_rw, 20001},
+    {0x2000, 2, od_data_type_uint32, od_access_type_rw, 20002},
+    {0x2000, 3, od_data_type_uint32, od_access_type_rw, 20003},
+    
+    // For testing access types
+    {0x2001, 0, od_data_type_uint8, od_access_type_ro, 3},
+    {0x2001, 1, od_data_type_uint32, od_access_type_ro, 20011},
+    {0x2001, 2, od_data_type_uint32, od_access_type_wo, 20012},
+    {0x2001, 3, od_data_type_uint32, od_access_type_const, 20013},
+    
+    // For testing sdo server
+    {0x2002, 0, od_data_type_uint8, od_access_type_ro, 3},
+    {0x2002, 1, od_data_type_uint32, od_access_type_rw, 20021},
+    {0x2002, 2, od_data_type_uint32, od_access_type_rw, 20022},
+    {0x2002, 3, od_data_type_uint32, od_access_type_rw, 20023},
+    
+    // For testing data types
+    {0x2003, 0, od_data_type_uint8, od_access_type_ro, 7},
+    {0x2003, 1, od_data_type_bool, od_access_type_ro, 20031},
+    {0x2003, 2, od_data_type_int8, od_access_type_ro, 20032},
+    {0x2003, 3, od_data_type_int16, od_access_type_ro, 20033},
+    {0x2003, 4, od_data_type_int32, od_access_type_ro, 20034},
+    {0x2003, 5, od_data_type_uint8, od_access_type_ro, 20035},
+    {0x2003, 6, od_data_type_uint16, od_access_type_ro, 20036},
+    {0x2003, 7, od_data_type_uint32, od_access_type_ro, 20037},
 };
 
 #endif

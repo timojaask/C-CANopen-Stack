@@ -20,10 +20,12 @@ static int num_handlers = 0;
 static void (*state_changed_handlers[MAX_HANDLERS])(nmt_state state);
 static void (*reset_communication_function)(void);
 static void (*reset_node_function)(void);
+static uint32_t previous_heartbeat_tick = 0;
 
 /****************************** Local Prototypes *****************************/
 static void change_state(nmt_state state, co_node *node);
 static void state_changed(co_node *node);
+static void send_heartbeat(co_node *node);
 
 /****************************** Global Functions *****************************/
 extern void nmt_slave_process_command(can_message *message, co_node *node) {
@@ -59,13 +61,25 @@ extern void nmt_slave_process_command(can_message *message, co_node *node) {
             break;
     }
 }
-extern void nmt_slave_send_heartbeat(co_node *node) {
-    can_message message;
-    uint8_t data = (uint8_t)node->state;
-    message.id = 0x700 + node->node_id;
-    message.data_len = 1;
-    message.data = &data;
-    can_bus_send_message(&message);
+/* Returns error (0 = no error, otherwise error occurred) */
+extern int nmt_slave_send_heartbeat(co_node *node, uint32_t tick_count) {
+    int error = 0;
+    // Check object dictionary to see if heartbeat is enabled and if so what is it's frequency
+    // The value is found in OD index 0x1017, sub index 0, data type uint16
+    uint32_t interval;
+    od_result result = od_read(node->od, 0x1017, 0, &interval);
+    if (result == OD_RESULT_OK) {
+        if (interval != 0) {
+            if (tick_count - previous_heartbeat_tick >= interval) {
+                send_heartbeat(node);
+                previous_heartbeat_tick = tick_count;
+            }
+        }
+    } else {
+        log_write_ln("nmt_slave: ERROR: reading heartbeat OD entry failed");
+        error = 1;
+    }
+    return error;
 }
 extern int nmt_slave_register_state_changed_handler(void (*handler_function)(nmt_state state)) {
     int error = 0;
@@ -110,5 +124,13 @@ static void state_changed(co_node *node) {
     for (int i = 0; i < num_handlers; i++) {
         (*state_changed_handlers[i])(node->state);
     }
+}
+static void send_heartbeat(co_node *node) {
+    can_message message;
+    uint8_t data = (uint8_t)node->state;
+    message.id = 0x700 + node->node_id;
+    message.data_len = 1;
+    message.data = &data;
+    can_bus_send_message(&message);
 }
 

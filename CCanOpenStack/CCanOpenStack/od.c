@@ -7,7 +7,9 @@
 //
 
 #include "od.h"
+#include "od_initialize.h"
 #include "log.h"
+#include "utils.h"
 
 /****************************** Local Variables ******************************/
 
@@ -16,6 +18,11 @@ static int get_data_type_num_bits(object_dictionary *od, od_data_type data_type)
 static void print_object_not_found_error(uint16_t index, uint8_t sub_index);
 
 /****************************** Global Functions *****************************/
+extern void od_initialize(object_dictionary *od) {
+    int num_objects = UTILS_ARRAY_SIZE(od_objects);
+    od->num_objects = num_objects;
+    od->objects = od_objects;
+}
 extern od_result od_read(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t *data) {
     od_result result = OD_RESULT_OK;
     int object_found = 0;

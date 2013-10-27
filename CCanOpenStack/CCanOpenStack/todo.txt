@@ -1,4 +1,10 @@
 TODO:
+- Put all testing OD things in the same OD. Remove small ODs from test files and put all data into od_initialize.h
+- Add od_setup_sdo(node_id) and od_setup_t/rpdo(pdo_num, cob_id, inhibit, event) functions to set initial OD parameters for SDO and PDOs. Also add od_set_r/tpdo_mapping(pdo_num, pdo_mapping_param[ ], num_params) function that takes an array if mapping parameters and writes them into OD. These PDO related functions should return error if there are not enough PDO slots available in the dictionary and that if more is needed, they should be typed into od_initialize.h list.
+- RPDO testing is straight forward. Make a can message, send to RPDO function which should first see if RPDO is enabled and if so, then parse the message and write values into OD according to mapping. Then the test function should read back these values to see that they have been written correctly.
+- TPDO testing should work like NMT heartbeat test with tick count and the rest kind of like RPDO function but in reverse.
+- Test how a node would function by having a function that calls NMT heartbeat and TPDO functions on every cycle with an updated tick count.
+- Also have a message received function that would figure out what kind if message this is and call appropriate message parser (NMT, RPDO or SDO).
 - Function that checks timer and sends heartbeat if enabled in OD + test
 - Change SDO send/receive take COB ID from object dictionary 0x1200
 - Function that processes RPDO if enabled in OD and uses mapping to save values in OD + test
@@ -8,9 +14,11 @@ TODO:
 - Reset communication and reset device functions. Also add them to nmt_slave.c to be called when appropriated command is received.
 - Implement functions that set the "current_state" variable in nmt_slave.c.
 - Transmit boot up message (transmitted after NMT initialization is finished, when going into NMT pre-operational)
+- The heartbeat and other even based activity needs to make sure they are sending messages at a constant average interval. Meaning if interval is set to be 100, first msg is sent at 0 and second is sent at 120 (too much time passed +20), then the third message should be sent around 200 (wait for 80 instead of full 100). How to implement this probably depends on the OS running. In FreeRTOS it might be possible to make OS take care of this by calling a special delay function.
 
 --------------------------------------------------------------------------------------
 DONE:
+- NMT function that takes tick count and OD. Sends heartbeat. Test by manipulating tick count and calling the NMT function.
 - Create a blueprint for default object dictionary
 - Implement data types and access types
 - Test data types and access types

@@ -15,7 +15,9 @@
 /***************************** Global Definitions ****************************/
 typedef enum {
     OD_RESULT_OK,
-    OD_RESULT_OBJECT_NOT_FOUND
+    OD_RESULT_OBJECT_NOT_FOUND,
+    OD_RESULT_READING_WRITE_ONLY_OBJECT,
+    OD_RESULT_WRITING_READ_ONLY_OBJECT
 } od_result;
 
 typedef struct {
@@ -26,5 +28,8 @@ typedef struct {
 /***************************** Global Prototypes *****************************/
 extern od_result od_read(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t *data);
 extern od_result od_write(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t data);
+extern od_result od_get_access_type(object_dictionary *od, uint16_t index, uint8_t sub_index, od_access_type *access_type);
+extern od_result od_get_data_type(object_dictionary *od, uint16_t index, uint8_t sub_index, od_data_type *data_type);
+extern od_result od_get_data_len(object_dictionary *od, uint16_t index, uint8_t sub_index, int *num_bits);
 
 #endif

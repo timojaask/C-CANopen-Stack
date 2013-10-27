@@ -1,4 +1,6 @@
 TODO:
+- Implement data types and access types
+- Test data types and access types
 - Create a test that uses nodes that can send and receive PDO messages
 - Create a test that uses nodes that support PDO mapping
 - Create a blueprint for default object dictionary

@@ -85,6 +85,7 @@
 		2578ACE81815D38F0010C2D2 /* test_util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_util.c; sourceTree = "<group>"; };
 		2578ACEA1816E2A70010C2D2 /* sdo_server.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sdo_server.h; sourceTree = "<group>"; };
 		2578ACEB1816E31B0010C2D2 /* sdo_server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdo_server.c; sourceTree = "<group>"; };
+		25FB1A11181C704700C5C3C9 /* od_initialize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = od_initialize.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +182,7 @@
 				2578ACD0181477500010C2D2 /* od_object.h */,
 				2578ACD41814799B0010C2D2 /* od.h */,
 				2578ACD5181479A10010C2D2 /* od.c */,
+				25FB1A11181C704700C5C3C9 /* od_initialize.h */,
 				2578ACE018148B410010C2D2 /* co_node.h */,
 				2578ACE11815B0C30010C2D2 /* sdo.h */,
 				2578ACE21815B2710010C2D2 /* sdo.c */,

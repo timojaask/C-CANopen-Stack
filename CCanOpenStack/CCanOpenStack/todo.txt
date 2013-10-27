@@ -1,16 +1,19 @@
 TODO:
-- Implement data types and access types
-- Test data types and access types
-- Create a test that uses nodes that can send and receive PDO messages
-- Create a test that uses nodes that support PDO mapping
-- Create a blueprint for default object dictionary
-- Object dictionary 0x1F80 NMT Start-up bit
+- Function that checks timer and sends heartbeat if enabled in OD + test
+- Change SDO send/receive take COB ID from object dictionary 0x1200
+- Function that processes RPDO if enabled in OD and uses mapping to save values in OD + test
+- Function that checks timer and starts TPDO transmission if enabled in OD + test
+- Function that prepares TPDO message using mapping + test
+- Function that puts node into operational state if enabled in OD 0x1F80 + test
 - Reset communication and reset device functions. Also add them to nmt_slave.c to be called when appropriated command is received.
 - Implement functions that set the "current_state" variable in nmt_slave.c.
 - Transmit boot up message (transmitted after NMT initialization is finished, when going into NMT pre-operational)
 
 --------------------------------------------------------------------------------------
 DONE:
+- Create a blueprint for default object dictionary
+- Implement data types and access types
+- Test data types and access types
 - Create NMT tests
 - Create node reset tests
 - NMT processing

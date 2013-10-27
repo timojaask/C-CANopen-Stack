@@ -9,7 +9,6 @@
 #include "test_od.h"
 #include "log.h"
 #include "od.h"
-#include "od_initialize.h"
 #include "utils.h"
 
 /***************************** Local Definitions *****************************/

@@ -9,7 +9,6 @@
 #ifndef CCanOpenStack_sdo_client_h
 #define CCanOpenStack_sdo_client_h
 
-
 #include <stdint.h>
 #include "can_message.h"
 

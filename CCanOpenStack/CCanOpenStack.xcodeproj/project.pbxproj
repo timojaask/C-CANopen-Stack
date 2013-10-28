@@ -11,6 +11,8 @@
 		25140D6418188C0F009F2F4E /* nmt_master.c in Sources */ = {isa = PBXBuildFile; fileRef = 25140D6318188C0F009F2F4E /* nmt_master.c */; };
 		25140D6618188C1C009F2F4E /* nmt_slave.c in Sources */ = {isa = PBXBuildFile; fileRef = 25140D6518188C1C009F2F4E /* nmt_slave.c */; };
 		25140D691819713A009F2F4E /* test_nmt.c in Sources */ = {isa = PBXBuildFile; fileRef = 25140D681819713A009F2F4E /* test_nmt.c */; };
+		253643FC181DB76200B9D035 /* pdo.c in Sources */ = {isa = PBXBuildFile; fileRef = 253643FB181DB76200B9D035 /* pdo.c */; };
+		253643FE181DBCC000B9D035 /* test_pdo.c in Sources */ = {isa = PBXBuildFile; fileRef = 253643FD181DBCC000B9D035 /* test_pdo.c */; };
 		25760ACC1816FCFD0013E412 /* test_sdo_server.c in Sources */ = {isa = PBXBuildFile; fileRef = 25760ACB1816FCFD0013E412 /* test_sdo_server.c */; };
 		2578ACB5181463F50010C2D2 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 2578ACB4181463F50010C2D2 /* main.c */; };
 		2578ACB7181463F50010C2D2 /* CCanOpenStack.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2578ACB6181463F50010C2D2 /* CCanOpenStack.1 */; };
@@ -50,6 +52,10 @@
 		25140D6718197132009F2F4E /* test_nmt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_nmt.h; sourceTree = "<group>"; };
 		25140D681819713A009F2F4E /* test_nmt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_nmt.c; sourceTree = "<group>"; };
 		25140D6A1819AE1C009F2F4E /* pdo_communication.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pdo_communication.txt; sourceTree = "<group>"; };
+		253643FA181DB6E400B9D035 /* pdo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pdo.h; sourceTree = "<group>"; };
+		253643FB181DB76200B9D035 /* pdo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pdo.c; sourceTree = "<group>"; };
+		253643FD181DBCC000B9D035 /* test_pdo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_pdo.c; sourceTree = "<group>"; };
+		253643FF181DBCCB00B9D035 /* test_pdo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_pdo.h; sourceTree = "<group>"; };
 		254140E91819CD73008A75C0 /* object_dictionary.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = object_dictionary.txt; sourceTree = "<group>"; };
 		25760ACA1816FCD80013E412 /* test_sdo_server.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_sdo_server.h; sourceTree = "<group>"; };
 		25760ACB1816FCFD0013E412 /* test_sdo_server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_sdo_server.c; sourceTree = "<group>"; };
@@ -172,6 +178,8 @@
 				25760ACB1816FCFD0013E412 /* test_sdo_server.c */,
 				25140D6718197132009F2F4E /* test_nmt.h */,
 				25140D681819713A009F2F4E /* test_nmt.c */,
+				253643FF181DBCCB00B9D035 /* test_pdo.h */,
+				253643FD181DBCC000B9D035 /* test_pdo.c */,
 			);
 			name = tests;
 			sourceTree = "<group>";
@@ -195,6 +203,8 @@
 				25140D6318188C0F009F2F4E /* nmt_master.c */,
 				25140D5F181799F6009F2F4E /* nmt_slave.h */,
 				25140D6518188C1C009F2F4E /* nmt_slave.c */,
+				253643FA181DB6E400B9D035 /* pdo.h */,
+				253643FB181DB76200B9D035 /* pdo.c */,
 			);
 			name = can_open;
 			sourceTree = "<group>";
@@ -251,11 +261,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2578ACD6181479A10010C2D2 /* od.c in Sources */,
+				253643FE181DBCC000B9D035 /* test_pdo.c in Sources */,
 				25140D6618188C1C009F2F4E /* nmt_slave.c in Sources */,
 				2578ACEC1816E31B0010C2D2 /* sdo_server.c in Sources */,
 				2578ACD918147D620010C2D2 /* test_od.c in Sources */,
 				2578ACCC181470D00010C2D2 /* test_can_bus.c in Sources */,
 				2578ACC518146B0B0010C2D2 /* log.c in Sources */,
+				253643FC181DB76200B9D035 /* pdo.c in Sources */,
 				25760ACC1816FCFD0013E412 /* test_sdo_server.c in Sources */,
 				2578ACE31815B2710010C2D2 /* sdo.c in Sources */,
 				25140D6418188C0F009F2F4E /* nmt_master.c in Sources */,

@@ -12,11 +12,11 @@
 #include "sdo.h"
 
 /***************************** Local Definitions *****************************/
-#define TSDO_BASE 0x580
 
 /****************************** Local Variables ******************************/
-uint8_t message_data[8];
-
+static uint8_t message_data[8];
+static uint16_t rsdo_cob_id = 0;
+static uint16_t tsdo_cob_id = 0;
 /****************************** Local Prototypes *****************************/
 static void process_download_request(can_message *message, co_node *node);
 static void process_upload_request(can_message *message, co_node *node);
@@ -24,6 +24,12 @@ static void send_abort_message(uint16_t index, uint8_t sub_index, sdo_abort_code
 static void sdo_set_server_command(can_message *message, sdo_server_command command);
 
 /****************************** Global Functions *****************************/
+extern void sdo_server_init(co_node *node) {
+    rsdo_cob_id = 0x600 + node->node_id;
+    tsdo_cob_id = 0x580 + node->node_id;
+    od_internal_write(node->od, 0x1200, 1, rsdo_cob_id);
+    od_internal_write(node->od, 0x1200, 2, tsdo_cob_id);
+}
 extern void sdo_server_process_request(can_message *message, co_node *node) {
     sdo_client_command cmd = sdo_get_client_command(message);
     switch (cmd) {
@@ -105,7 +111,7 @@ static void process_upload_request(can_message *message, co_node *node) {
     switch (result) {
         case OD_RESULT_OK:
             sdo_message_expedited_upload_response(message, index, sub_index, data);
-            message->id = TSDO_BASE + node->node_id;
+            message->id = tsdo_cob_id;
             can_bus_send_message(message);
             break;
         case OD_RESULT_OBJECT_NOT_FOUND:
@@ -121,7 +127,7 @@ static void send_abort_message(uint16_t index, uint8_t sub_index, sdo_abort_code
     can_message message;
     message.data = message_data;
     sdo_message_server_abort_transfer(&message, index, sub_index, code);
-    message.id = TSDO_BASE + node->node_id;
+    message.id = tsdo_cob_id;
     can_bus_send_message(&message);
 }
 

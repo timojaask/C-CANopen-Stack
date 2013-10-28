@@ -50,6 +50,8 @@ extern int test_sdo_server_run(void) {
     message.data = msg_data;
     message.data_len = 8;
     
+    sdo_server_init(&node);
+    
     // Send upload requests
     // Set error to 1 before each request. If test passes, message handler will set it to 0.
     send_upload_request(0x2002, 1, 20021);

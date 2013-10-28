@@ -180,6 +180,38 @@ od_object od_objects[] = {
     {0x2003, 5, od_data_type_uint8, od_access_type_ro, 20035},
     {0x2003, 6, od_data_type_uint16, od_access_type_ro, 20036},
     {0x2003, 7, od_data_type_uint32, od_access_type_ro, 20037},
+    
+    // For rpdo mapping test
+    {0x2004, 0, od_data_type_uint8, od_access_type_ro, 3},
+    {0x2004, 1, od_data_type_uint8, od_access_type_rw, 0},
+    {0x2004, 2, od_data_type_uint8, od_access_type_rw, 0},
+    {0x2004, 3, od_data_type_uint8, od_access_type_rw, 0},
+    
+    {0x2005, 0, od_data_type_uint8, od_access_type_ro, 3},
+    {0x2005, 1, od_data_type_uint16, od_access_type_rw, 0},
+    {0x2005, 2, od_data_type_uint16, od_access_type_rw, 0},
+    {0x2005, 3, od_data_type_uint16, od_access_type_rw, 0},
+    
+    {0x2006, 0, od_data_type_uint8, od_access_type_ro, 3},
+    {0x2006, 1, od_data_type_uint32, od_access_type_rw, 0},
+    {0x2006, 2, od_data_type_uint32, od_access_type_rw, 0},
+    {0x2006, 3, od_data_type_uint32, od_access_type_rw, 0},
+    
+    // For tpdo mapping test
+    {0x2007, 0, od_data_type_uint8, od_access_type_ro, 3},
+    {0x2007, 1, od_data_type_uint8, od_access_type_rw, 71},
+    {0x2007, 2, od_data_type_uint8, od_access_type_rw, 72},
+    {0x2007, 3, od_data_type_uint8, od_access_type_rw, 73},
+    
+    {0x2008, 0, od_data_type_uint8, od_access_type_ro, 3},
+    {0x2008, 1, od_data_type_uint16, od_access_type_rw, 81},
+    {0x2008, 2, od_data_type_uint16, od_access_type_rw, 82},
+    {0x2008, 3, od_data_type_uint16, od_access_type_rw, 83},
+    
+    {0x2009, 0, od_data_type_uint8, od_access_type_ro, 3},
+    {0x2009, 1, od_data_type_uint32, od_access_type_rw, 91},
+    {0x2009, 2, od_data_type_uint32, od_access_type_rw, 92},
+    {0x2009, 3, od_data_type_uint32, od_access_type_rw, 93},
 };
 
 #endif

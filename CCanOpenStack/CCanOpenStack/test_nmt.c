@@ -109,6 +109,18 @@ static void set_heartbeat_interval(uint32_t interval) {
         log_write_ln("test_nmt: ERROR: setting heartbeat interval failed");
     }
 }
+/**
+ * @brief Test NMT functionality.
+ *
+ * - NMT master sends an NMT command to a slave.
+ * - Slave receives the command, processes it and sends a heartbeat.
+ * - NMT master receives the heartbeat, processes it and saves to slave node list.
+ * Then check if the NMT state of the slave node is reported correctly in the
+ * master's slave node list.
+ *
+ * @param command The NMT command to be tested
+ * @note This function sets a file variable 'error' if error occurs
+ */
 static void test_nmt_command(nmt_command command) {
     state_changed_fired = 0;
     reset_comm_called = 0;
@@ -158,6 +170,16 @@ static void test_nmt_command(nmt_command command) {
         }
     }
 }
+/**
+ * @brief See if node has reported an expected state.
+ *
+ * Reads a node list from NMT master and checks if the selected
+ * node is on the list and if the node has the correct NMT state.
+ *
+ * @param node The CANopen node the NMT state of which is being checked.
+ * @param expected_state The expected NMT state of the selected node.
+ * @note This function sets a file variable 'error' if error occurs
+ */
 static void check_node_state_from_master(co_node *node, nmt_state expected_state) {
     if (nmt_master_num_nodes() == 1) {
         if (nmt_master_node_list()[0].node_id == slave_node.node_id) {

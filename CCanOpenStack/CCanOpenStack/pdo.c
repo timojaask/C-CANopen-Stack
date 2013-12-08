@@ -7,6 +7,7 @@
 //
 
 #include "pdo.h"
+#include "can_bus.h"
 #include "log.h"
 #include "od.h"
 
@@ -15,9 +16,11 @@
 /****************************** Local Variables ******************************/
 static int num_rpdos = 0;
 static int num_tpdos = 0;
+static uint32_t previous_tpdo_tick = 0;
 
 /****************************** Local Prototypes *****************************/
 static int set_pdo_mapping(co_node *node, pdo_mapping_param mapping[], int num_params, uint16_t mapping_index);
+static int map_tpdo(co_node *node, int tpdo_num, uint8_t *data, uint8_t *data_num_bytes);
 
 /****************************** Global Functions *****************************/
 extern int pdo_add_rpdo(co_node *node, uint16_t cob_id, pdo_mapping_param mapping[], int num_params) {
@@ -135,6 +138,65 @@ extern int pdo_process_rpdo(co_node *node, can_message *msg) {
     }
     return error;
 }
+extern int pdo_send_tpdo(co_node *node, uint32_t tick_count) {
+    int error = 0;
+    for (int i = 0; i < num_tpdos; i++) {
+        uint16_t index = 0x1800 + i;
+        uint32_t data;
+        uint8_t msg_data[8];
+        uint16_t tpdo_cob_id;
+        uint8_t msg_can_be_sent = 0;
+        uint8_t msg_num_bytes = 0;
+        // see if this TPDO is enabled
+        od_result result = od_read(node->od, index, 1, &data);
+        if (result != OD_RESULT_OK) {
+            error = 1;
+            log_write_ln("pdo: pdo_send_tpdo: ERROR: could not read OD %04Xh:%d", index, 1);
+        }
+        if (!error) {
+            //  If bit 31 of sub index 1 is 1, then the PDO is diabled
+            if ((data & (1 << 31)) > 0) {
+                // This TPDO is diabled, move on to the next one
+                continue;
+            } else {
+                // This TPDO is enabled, save the COB ID, which is 11 bits long
+                tpdo_cob_id = data & 0x7FF;
+            }
+        }
+        if (!error) {
+            // See event timer has reached
+            result = od_read(node->od, index, 5, &data);
+            if (result != OD_RESULT_OK) {
+                error = 1;
+                log_write_ln("pdo: pdo_send_tpdo: ERROR: could not read OD %04Xh:%d", index, 5);
+            }
+        }
+        if (!error) {
+            // data contains event timer in milliseconds. If at least that much time has passed since last
+            // TPDO was sent, then we can send again
+            if (tick_count - previous_tpdo_tick >= data) {
+                msg_can_be_sent = 1;
+                // Map TPDO to CAN message data
+                error = map_tpdo(node, i, msg_data, &msg_num_bytes);
+                previous_tpdo_tick = tick_count;
+            }
+        }
+        if (!error) {
+            if (msg_can_be_sent) {
+                // Send the TPDO message
+                can_message msg;
+                msg.data = msg_data;
+                msg.data_len = msg_num_bytes;
+                msg.id = tpdo_cob_id;
+                can_bus_send_message(&msg);
+            }
+        }
+        if (error) {
+            log_write_ln("pdo: pdo_send_tpdo FAILED");
+        }
+    }
+    return error;
+}
 /****************************** Local Functions ******************************/
 static int set_pdo_mapping(co_node *node, pdo_mapping_param mapping[], int num_params, uint16_t mapping_index) {
     int error = 0;
@@ -170,5 +232,63 @@ static int set_pdo_mapping(co_node *node, pdo_mapping_param mapping[], int num_p
     if (result != OD_RESULT_OK) {
         error = 1;
     }
+    return error;
+}
+static int map_tpdo(co_node *node, int tpdo_num, uint8_t *msg_data, uint8_t *data_num_bytes) {
+    int error = 0;
+    uint32_t out_data1 = 0;
+    uint32_t out_data2 = 0;
+    uint8_t current_bit = 0;
+    uint16_t index = 0x1A00 + tpdo_num;
+    uint32_t od_value;
+    int num_params;
+    // See how many mapping parameters there are
+    od_result result = od_read(node->od, index, 0, &od_value);
+    if (result != OD_RESULT_OK) {
+        log_write_ln("pdo: map_tpdo: ERROR: could not read OD %04Xh:%d", index, 1);
+        error = 1;
+    }
+    if (!error) {
+        num_params = od_value;
+        // Loop through each mapping parameter and gather OD values from where they point to
+        for (int i = 1; i <= num_params; i++) {
+            // Get source OD entry index, sub index and number of bits
+            result = od_read(node->od, index, i, &od_value);
+            if (result != OD_RESULT_OK) {
+                error = 1;
+                log_write_ln("pdo: map_tpdo: ERROR: could not read OD %04Xh:%d", index, 1);
+                break;
+            }
+            uint16_t src_index = (od_value >> 16) & 0xFFFF;
+            uint8_t src_sub_index = (od_value >> 8) & 0xFF;
+            uint8_t src_num_bits = od_value & 0xFF;
+            // Get the value of the source OD entry
+            result = od_read(node->od, src_index, src_sub_index, &od_value);
+            // Write the value into data variables
+            if (current_bit < 32) {
+                if (current_bit + src_num_bits < 32) {
+                    uint32_t mask = (1 << src_num_bits) - 1;
+                    out_data1 += (od_value & mask) << current_bit;
+                } else {
+                    int data1len = 32 - current_bit;
+                    int data2len = src_num_bits - data1len;
+                    uint32_t mask1 = (1 << data1len) - 1;
+                    uint32_t mask2 = (1 << data2len) - 1;
+                    out_data1 += (od_value & mask1) << current_bit;
+                    out_data2 = (od_value >> data1len) & mask2;
+                }
+            } else {
+                uint32_t mask = (1 << src_num_bits) - 1;
+                out_data2 += (od_value & mask) << (current_bit - 32);
+            }
+            current_bit += src_num_bits;
+        }
+    }
+    // Copy data from out_data to *msg_data array
+    for (int i = 0; i < 4; i++) {
+        msg_data[i] = (out_data1 >> (8 * i)) & 0xFF;
+        msg_data[i + 4] = (out_data2 >> (8 * i)) & 0xFF;
+    }
+    *data_num_bytes = (current_bit / 8);
     return error;
 }

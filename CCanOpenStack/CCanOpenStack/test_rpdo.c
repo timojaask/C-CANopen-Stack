@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Timo Jääskeläinen. All rights reserved.
 //
 
-#include "test_pdo.h"
+#include "test_rpdo.h"
 #include "can_message.h"
 #include "co_node.h"
 #include "log.h"
@@ -42,7 +42,7 @@ static uint8_t data[8];
 static int test_pdo(co_node *node, int cob_id, pdo_mapping_param *params, int num_params, uint32_t *expected);
 
 /****************************** Global Functions *****************************/
-extern int test_pdo_run(void) {
+extern int test_rpdo_run(void) {
     int error = 0;
     object_dictionary od;
     od_initialize(&od);
@@ -55,7 +55,7 @@ extern int test_pdo_run(void) {
     data[0] = 11;
     data[1] = 22;
     data[2] = 33;
-    test_pdo(&node, 0x181, rpdo_params1, UTILS_ARRAY_SIZE(rpdo_params1), rpdo_params1_expect);
+    error = test_pdo(&node, 0x181, rpdo_params1, UTILS_ARRAY_SIZE(rpdo_params1), rpdo_params1_expect);
     
     // Test some complex RPDO parameters // 0x169A227263526646 (6, 0x4CC8, 0x6A, 0x98, 0x13444E, 0x16)
     data[0] = 0x46;
@@ -66,7 +66,7 @@ extern int test_pdo_run(void) {
     data[5] = 0x22;
     data[6] = 0x9A;
     data[7] = 0x16;
-    test_pdo(&node, 0x182, rpdo_params2, UTILS_ARRAY_SIZE(rpdo_params2), rpdo_params2_expect);
+    error = test_pdo(&node, 0x182, rpdo_params2, UTILS_ARRAY_SIZE(rpdo_params2), rpdo_params2_expect);
     return error;
 }
 
@@ -79,7 +79,7 @@ static int test_pdo(co_node *node, int cob_id, pdo_mapping_param *params, int nu
         msg.id = cob_id;
         msg.data_len = 8;
         msg.data = data;
-        error = pdo_process_rpdo(node, &msg);
+        error |= pdo_process_rpdo(node, &msg);
     }
     if (!error) {
         // See if data was written into object dictionary properly

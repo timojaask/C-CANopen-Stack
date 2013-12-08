@@ -7,3 +7,5 @@ Other possible trigger methods are:
  
 Due to time constrains and also because time driven is mostly used in our company,
 only time driven communication will be implemented at this time.
+
+As per CANopen standard, the RPDO communication parameters start at 0x1400 and mapping at 1600.

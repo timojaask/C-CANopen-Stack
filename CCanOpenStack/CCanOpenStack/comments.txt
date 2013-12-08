@@ -12,3 +12,14 @@ in source files:
 /****************************** Local Prototypes *****************************/
 /****************************** Global Functions *****************************/
 /****************************** Local Functions ******************************/
+
+
+
+/**
+ * @brief Short description
+ *
+ * Long description
+ *
+ * @param param1 Parameter description
+ * @return Return value description
+ */

@@ -10,6 +10,6 @@
 #define CCanOpenStack_test_pdo_h
 
 /***************************** Global Prototypes *****************************/
-extern int test_pdo_run(void);
+extern int test_rpdo_run(void);
 
 #endif

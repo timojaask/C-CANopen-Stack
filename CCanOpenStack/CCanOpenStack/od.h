@@ -26,7 +26,7 @@ typedef struct {
 } object_dictionary;
 
 /***************************** Global Prototypes *****************************/
-extern void od_initialize(object_dictionary *od);
+extern int od_initialize(object_dictionary *od);
 extern od_result od_read(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t *data);
 extern od_result od_write(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t data);
 extern od_result od_internal_write(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t data);

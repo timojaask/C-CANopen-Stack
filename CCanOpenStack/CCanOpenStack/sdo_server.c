@@ -15,8 +15,9 @@
 
 /****************************** Local Variables ******************************/
 static uint8_t message_data[8];
-static uint16_t rsdo_cob_id = 0;
-static uint16_t tsdo_cob_id = 0;
+static can_message response_msg;
+static uint32_t rsdo_cob_id = 0;
+static uint32_t tsdo_cob_id = 0;
 /****************************** Local Prototypes *****************************/
 static void process_download_request(can_message *message, co_node *node);
 static void process_upload_request(can_message *message, co_node *node);
@@ -24,11 +25,56 @@ static void send_abort_message(uint16_t index, uint8_t sub_index, sdo_abort_code
 static void sdo_set_server_command(can_message *message, sdo_server_command command);
 
 /****************************** Global Functions *****************************/
-extern void sdo_server_init(co_node *node) {
-    rsdo_cob_id = 0x600 + node->node_id;
-    tsdo_cob_id = 0x580 + node->node_id;
-    od_internal_write(node->od, 0x1200, 1, rsdo_cob_id);
-    od_internal_write(node->od, 0x1200, 2, tsdo_cob_id);
+extern int sdo_server_init(co_node *node) {
+    int error = 0;
+    error = sdo_server_get_tsdo_cob_id(node, &tsdo_cob_id);
+    if (error) {
+        log_write_ln("sdo_server: ERROR: could not read TSDO COB-ID from OD");
+    }
+    if (!error) {
+        error = sdo_server_get_rsdo_cob_id(node, &rsdo_cob_id);
+        if (error) {
+            log_write_ln("sdo_server: ERROR: could not read RSDO COB-ID from OD");
+        }
+    }
+    if (!error) {
+        tsdo_cob_id += node->node_id;
+        od_result result = od_internal_write(node->od, 0x1200, 1, tsdo_cob_id);
+        if (result != OD_RESULT_OK) {
+            error = 1;
+            log_write_ln("sdo_server: ERROR: could not save TSDO COB-ID to OD");
+        }
+    }
+    if (!error) {
+        rsdo_cob_id += node->node_id;
+        od_result result = od_internal_write(node->od, 0x1200, 2, rsdo_cob_id);
+        if (result != OD_RESULT_OK) {
+            error = 1;
+            log_write_ln("sdo_server: ERROR: could not save RSDO COB-ID to OD");
+        }
+    }
+    if (!error) {
+        response_msg.id = tsdo_cob_id;
+        response_msg.data = message_data;
+        response_msg.data_len = 8;
+    }
+    return error;
+}
+extern int sdo_server_get_rsdo_cob_id(co_node *node, uint32_t *cob_id) {
+    int error = 0;
+    od_result result = od_read(node->od, 0x1200, 2, cob_id);
+    if (result != OD_RESULT_OK) {
+        error = 1;
+    }
+    return error;
+}
+extern int sdo_server_get_tsdo_cob_id(co_node *node, uint32_t *cob_id) {
+    int error = 0;
+    od_result result = od_read(node->od, 0x1200, 1, cob_id);
+    if (result != OD_RESULT_OK) {
+        error = 1;
+    }
+    return error;
 }
 extern void sdo_server_process_request(can_message *message, co_node *node) {
     sdo_client_command cmd = sdo_get_client_command(message);
@@ -87,8 +133,8 @@ static void process_download_request(can_message *message, co_node *node) {
         od_result result = od_write(node->od, index, sub_index, data);
         switch (result) {
             case OD_RESULT_OK:
-                sdo_message_download_response(message, index, sub_index);
-                can_bus_send_message(message);
+                sdo_message_download_response(&response_msg, index, sub_index);
+                can_bus_send_message(&response_msg);
                 break;
             case OD_RESULT_OBJECT_NOT_FOUND:
                 send_abort_message(index, sub_index, sdo_abort_subindex_does_not_exist, node);
@@ -110,9 +156,8 @@ static void process_upload_request(can_message *message, co_node *node) {
     od_result result = od_read(node->od, index, sub_index, &data);
     switch (result) {
         case OD_RESULT_OK:
-            sdo_message_expedited_upload_response(message, index, sub_index, data);
-            message->id = tsdo_cob_id;
-            can_bus_send_message(message);
+            sdo_message_expedited_upload_response(&response_msg, index, sub_index, data);
+            can_bus_send_message(&response_msg);
             break;
         case OD_RESULT_OBJECT_NOT_FOUND:
             send_abort_message(index, sub_index, sdo_abort_subindex_does_not_exist, node);
@@ -124,11 +169,8 @@ static void process_upload_request(can_message *message, co_node *node) {
     }
 }
 static void send_abort_message(uint16_t index, uint8_t sub_index, sdo_abort_code code, co_node *node) {
-    can_message message;
-    message.data = message_data;
-    sdo_message_server_abort_transfer(&message, index, sub_index, code);
-    message.id = tsdo_cob_id;
-    can_bus_send_message(&message);
+    sdo_message_server_abort_transfer(&response_msg, index, sub_index, code);
+    can_bus_send_message(&response_msg);
 }
 
 static void sdo_set_server_command(can_message *message, sdo_server_command command) {

@@ -1,5 +1,4 @@
 TODO:
-- TPDO testing should work like NMT heartbeat test with tick count and the rest kind of like RPDO function but in reverse.
 - Test how a node would function by having a function that calls NMT heartbeat and TPDO functions on every cycle with an updated tick count.
 - Also have a message received function that would figure out what kind if message this is and call appropriate message parser (NMT, RPDO or SDO).
 - Function that checks timer and sends heartbeat if enabled in OD + test
@@ -15,6 +14,7 @@ TODO:
 - In SDO functions, on write, check for data type overflow and if so, return abort message
 --------------------------------------------------------------------------------------
 DONE:
+- TPDO testing should work like NMT heartbeat test with tick count and the rest kind of like RPDO function but in reverse.
 - RPDO testing is straight forward. Make a can message, send to RPDO function which should first see if RPDO is enabled and if so, then parse the message and write values into OD according to mapping. Then the test function should read back these values to see that they have been written correctly.
 - Add od_setup_sdo(node_id) and od_setup_t/rpdo(pdo_num, cob_id, inhibit, event) functions to set initial OD parameters for SDO and PDOs. Also add od_set_r/tpdo_mapping(pdo_num, pdo_mapping_param[ ], num_params) function that takes an array if mapping parameters and writes them into OD. These PDO related functions should return error if there are not enough PDO slots available in the dictionary and that if more is needed, they should be typed into od_initialize.h list.
 - Put all testing OD things in the same OD. Remove small ODs from test files and put all data into od_initialize.h

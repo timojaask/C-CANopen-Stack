@@ -81,6 +81,9 @@ extern int nmt_slave_send_heartbeat(co_node *node, uint32_t tick_count) {
     }
     return error;
 }
+extern void nmt_slave_send_heartbeat_immediately(co_node *node) {
+    send_heartbeat(node);
+}
 extern int nmt_slave_register_state_changed_handler(void (*handler_function)(nmt_state state)) {
     int error = 0;
     if (num_handlers < MAX_HANDLERS) {

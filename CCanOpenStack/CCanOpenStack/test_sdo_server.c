@@ -17,7 +17,7 @@
 #include "utils.h"
 
 /***************************** Local Definitions *****************************/
-#define RSDO_BASE 0x580
+#define TSDO_BASE 0x580
 
 /****************************** Local Variables ******************************/
 static int error = 0;
@@ -103,7 +103,7 @@ static void send_download_request(uint16_t index, uint8_t sub_index, uint32_t da
 
 static void message_received_handler(can_message *message) {
     if (test_running) {
-        if (message->id == RSDO_BASE + node.node_id) {
+        if (message->id == TSDO_BASE + node.node_id) {
             sdo_server_command cmd = sdo_get_server_command(message);
             if (cmd == expected_response_command) {
                 switch (cmd) {
@@ -123,7 +123,7 @@ static void message_received_handler(can_message *message) {
                 error = 1;
             }
         } else {
-            log_write_ln("test_sdo_server: ERROR: wrong message COB ID: %02Xh, expected: %02Xh", message->id, (RSDO_BASE + node.node_id));
+            log_write_ln("test_sdo_server: ERROR: wrong message COB ID: %02Xh, expected: %02Xh", message->id, (TSDO_BASE + node.node_id));
             error = 1;
         }
     }

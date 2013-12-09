@@ -8,6 +8,7 @@
 
 #include "test.h"
 #include "log.h"
+#include "test_appcycle.h"
 #include "test_can_bus.h"
 #include "test_nmt.h"
 #include "test_od.h"
@@ -26,6 +27,7 @@ extern void test_run_all_tests(void) {
     error |= test_nmt_run();
     error |= test_rpdo_run();
     error |= test_tpdo_run();
+    error |= test_appcycle_run();
     if (!error) {
         log_write_ln("test: ALL OK");
     } else {

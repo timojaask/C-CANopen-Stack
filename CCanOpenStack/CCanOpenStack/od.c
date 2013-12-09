@@ -18,10 +18,26 @@ static int get_data_type_num_bits(object_dictionary *od, od_data_type data_type)
 static void print_object_not_found_error(uint16_t index, uint8_t sub_index);
 
 /****************************** Global Functions *****************************/
-extern void od_initialize(object_dictionary *od) {
-    int num_objects = UTILS_ARRAY_SIZE(od_objects);
-    od->num_objects = num_objects;
-    od->objects = od_objects;
+extern int od_initialize(object_dictionary *od) {
+    int error = 0;
+    int num_objects = UTILS_ARRAY_SIZE(od_default_objects);
+    if (num_objects >= OD_INITIALIZE_MAX_OBJECTS) {
+        error = 1;
+        log_write_ln("od: ERROR: failed to initialize object dictionary because maximum number of object is exceeded");
+    }
+    if (!error) {
+        od->num_objects = num_objects;
+        od->objects = od_objects;
+        // Copy default OD values from OD default objects array
+        for (int i = 0; i < num_objects; i++) {
+            od_objects[i].access_type = od_default_objects[i].access_type;
+            od_objects[i].data = od_default_objects[i].data;
+            od_objects[i].data_type = od_default_objects[i].data_type;
+            od_objects[i].index = od_default_objects[i].index;
+            od_objects[i].sub_index = od_default_objects[i].sub_index;
+        }
+    }
+    return error;
 }
 extern od_result od_read(object_dictionary *od, uint16_t index, uint8_t sub_index, uint32_t *data) {
     od_result result = OD_RESULT_OK;

@@ -9,7 +9,9 @@
 #ifndef CCanOpenStack_od_initialize_h
 #define CCanOpenStack_od_initialize_h
 
-od_object od_objects[] = {
+#define OD_INITIALIZE_MAX_OBJECTS 256
+od_object od_objects[OD_INITIALIZE_MAX_OBJECTS];
+od_object od_default_objects[] = {
     // Data types (for reference only)
     {0x0001, 0, od_data_type_uint8, od_access_type_ro, 1}, // BOOL: 1 bit
     {0x0002, 0, od_data_type_uint8, od_access_type_ro, 8}, // INT8: 8 bits
@@ -32,8 +34,8 @@ od_object od_objects[] = {
     {0x1018, 1, od_data_type_uint32, od_access_type_ro, 12345}, // Vendor ID
     // SDO server parameters
     {0x1200, 0, od_data_type_uint8, od_access_type_ro, 2},
-    {0x1200, 1, od_data_type_uint32, od_access_type_ro, 0x600}, // RSDO COB ID : 0x600 base + node ID (to config)
-    {0x1200, 2, od_data_type_uint32, od_access_type_ro, 0x580}, // TSDO COB ID : 0x580 base + node ID (to config)
+    {0x1200, 1, od_data_type_uint32, od_access_type_ro, 0x580}, // TSDO COB ID : 0x600 base + node ID (to config)
+    {0x1200, 2, od_data_type_uint32, od_access_type_ro, 0x600}, // RSDO COB ID : 0x580 base + node ID (to config)
     // RPDO 1-4 parameters
     {0x1400, 0, od_data_type_uint8, od_access_type_ro, 2},
     {0x1400, 1, od_data_type_uint32, od_access_type_ro, (1 << 31)}, // RPDO1 COB ID : Not in use (to be configured)

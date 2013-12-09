@@ -16,6 +16,7 @@
 /***************************** Global Prototypes *****************************/
 extern void nmt_slave_process_command(can_message *message, co_node *node);
 extern int nmt_slave_send_heartbeat(co_node *node, uint32_t tick_count);
+extern void nmt_slave_send_heartbeat_immediately(co_node *node);
 extern int nmt_slave_register_state_changed_handler(void (*handler_function)(nmt_state state));
 extern void nmt_slave_set_reset_communication_function(void (*function)(void));
 extern void nmt_slave_set_reset_node_function(void (*function)(void));

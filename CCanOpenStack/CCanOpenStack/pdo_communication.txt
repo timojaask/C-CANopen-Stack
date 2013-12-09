@@ -11,3 +11,16 @@ only time driven communication will be implemented at this time.
 In the time driven communication the PDO is transmitted when event timer reaches zero. So if PDO event timer is set to 100 ms, the PDO will be transmitted every 100 ms.
 
 As per CANopen standard, the RPDO communication parameters start at 0x1400 and mapping at 1600.
+
+Choosing PDO COB-ID:
+Typically, when the number of each PDO type (transmit/receive) does not exceed 4, the COB-ID's are allocated as follows:
+ - TPDO1: 180h + NodeId
+ - TPDO2: 280h + NodeId
+ - TPDO3: 380h + NodeId
+ - TPDO4: 480h + NodeId
+ - RPDO1: 200h + NodeId
+ - RPDO2: 300h + NodeId
+ - RPDO3: 400h + NodeId
+ - RPDO4: 500h + NodeId
+ 
+ If the number of TPDO's or RPDO's needs to be greater than 4, then another COB-ID can be used as long as it doesn't belong to any existing node in the same CANopen network.

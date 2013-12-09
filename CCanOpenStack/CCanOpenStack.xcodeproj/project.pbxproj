@@ -27,6 +27,9 @@
 		2578ACE61815C2430010C2D2 /* test_sdo.c in Sources */ = {isa = PBXBuildFile; fileRef = 2578ACE51815C2430010C2D2 /* test_sdo.c */; };
 		2578ACE91815D38F0010C2D2 /* test_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 2578ACE81815D38F0010C2D2 /* test_util.c */; };
 		2578ACEC1816E31B0010C2D2 /* sdo_server.c in Sources */ = {isa = PBXBuildFile; fileRef = 2578ACEB1816E31B0010C2D2 /* sdo_server.c */; };
+		25C1FF5E1855087100887766 /* delay.c in Sources */ = {isa = PBXBuildFile; fileRef = 25C1FF5D1855087100887766 /* delay.c */; };
+		25C1FF60185509B000887766 /* test_appcycle.c in Sources */ = {isa = PBXBuildFile; fileRef = 25C1FF5F185509B000887766 /* test_appcycle.c */; };
+		25C1FF641855125500887766 /* co_stack.c in Sources */ = {isa = PBXBuildFile; fileRef = 25C1FF631855125500887766 /* co_stack.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -94,6 +97,12 @@
 		2578ACE81815D38F0010C2D2 /* test_util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_util.c; sourceTree = "<group>"; };
 		2578ACEA1816E2A70010C2D2 /* sdo_server.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sdo_server.h; sourceTree = "<group>"; };
 		2578ACEB1816E31B0010C2D2 /* sdo_server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sdo_server.c; sourceTree = "<group>"; };
+		25C1FF5C1855086A00887766 /* delay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = delay.h; sourceTree = "<group>"; };
+		25C1FF5D1855087100887766 /* delay.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = delay.c; sourceTree = "<group>"; };
+		25C1FF5F185509B000887766 /* test_appcycle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_appcycle.c; sourceTree = "<group>"; };
+		25C1FF61185509BB00887766 /* test_appcycle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_appcycle.h; sourceTree = "<group>"; };
+		25C1FF621855124D00887766 /* co_stack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = co_stack.h; sourceTree = "<group>"; };
+		25C1FF631855125500887766 /* co_stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = co_stack.c; sourceTree = "<group>"; };
 		25FB1A11181C704700C5C3C9 /* od_initialize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = od_initialize.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,6 +136,7 @@
 		2578ACB3181463F50010C2D2 /* CCanOpenStack */ = {
 			isa = PBXGroup;
 			children = (
+				25C1FF5B1854E1A900887766 /* portable */,
 				2578ACC61814701C0010C2D2 /* tests */,
 				2578ACCD181476EB0010C2D2 /* can_open */,
 				2578ACC2181469B20010C2D2 /* log */,
@@ -185,6 +195,8 @@
 				253643FD181DBCC000B9D035 /* test_rpdo.c */,
 				25364400181EFDD900B9D035 /* test_tpdo.h */,
 				25364401181EFDE100B9D035 /* test_tpdo.c */,
+				25C1FF5F185509B000887766 /* test_appcycle.c */,
+				25C1FF61185509BB00887766 /* test_appcycle.h */,
 			);
 			name = tests;
 			sourceTree = "<group>";
@@ -210,8 +222,19 @@
 				25140D6518188C1C009F2F4E /* nmt_slave.c */,
 				253643FA181DB6E400B9D035 /* pdo.h */,
 				253643FB181DB76200B9D035 /* pdo.c */,
+				25C1FF621855124D00887766 /* co_stack.h */,
+				25C1FF631855125500887766 /* co_stack.c */,
 			);
 			name = can_open;
+			sourceTree = "<group>";
+		};
+		25C1FF5B1854E1A900887766 /* portable */ = {
+			isa = PBXGroup;
+			children = (
+				25C1FF5C1855086A00887766 /* delay.h */,
+				25C1FF5D1855087100887766 /* delay.c */,
+			);
+			name = portable;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,6 +295,8 @@
 				2578ACD918147D620010C2D2 /* test_od.c in Sources */,
 				2578ACCC181470D00010C2D2 /* test_can_bus.c in Sources */,
 				2578ACC518146B0B0010C2D2 /* log.c in Sources */,
+				25C1FF60185509B000887766 /* test_appcycle.c in Sources */,
+				25C1FF641855125500887766 /* co_stack.c in Sources */,
 				253643FC181DB76200B9D035 /* pdo.c in Sources */,
 				25760ACC1816FCFD0013E412 /* test_sdo_server.c in Sources */,
 				2578ACE31815B2710010C2D2 /* sdo.c in Sources */,
@@ -284,6 +309,7 @@
 				2578ACE91815D38F0010C2D2 /* test_util.c in Sources */,
 				2578ACE61815C2430010C2D2 /* test_sdo.c in Sources */,
 				2578ACC9181470560010C2D2 /* test.c in Sources */,
+				25C1FF5E1855087100887766 /* delay.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -63,7 +63,7 @@ extern int test_tpdo_run(void) {
     can_bus_register_message_received_handler(can_message_received);
     
     int num_params = UTILS_ARRAY_SIZE(tpdo_params1);
-    tpdo_cob_id = 0x201;
+    tpdo_cob_id = 0x181;
     error |= pdo_add_tpdo(&node, tpdo_cob_id, 10, event_time_ms, tpdo_params1, num_params);
     
     // Wait for the first TPDO (should be received when tick count is 90 ms)

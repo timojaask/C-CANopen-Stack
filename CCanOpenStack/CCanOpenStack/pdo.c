@@ -12,17 +12,26 @@
 #include "od.h"
 
 /***************************** Local Definitions *****************************/
-
+#define MAX_TPDOS 64
 /****************************** Local Variables ******************************/
 static int num_rpdos = 0;
 static int num_tpdos = 0;
-static uint32_t previous_tpdo_tick = 0;
+static int32_t tpdo_counter[MAX_TPDOS];
+static uint32_t prev_tick_count = 0;
 
 /****************************** Local Prototypes *****************************/
 static int set_pdo_mapping(co_node *node, pdo_mapping_param mapping[], int num_params, uint16_t mapping_index);
 static int map_tpdo(co_node *node, int tpdo_num, uint8_t *data, uint8_t *data_num_bytes);
 
 /****************************** Global Functions *****************************/
+extern void pdo_initialize(uint32_t tick_count) {
+    num_rpdos = 0;
+    num_tpdos = 0;
+    for (int i = 0; i < MAX_TPDOS; i++) {
+        tpdo_counter[i] = 0;
+    }
+    prev_tick_count = tick_count;
+}
 extern int pdo_add_rpdo(co_node *node, uint16_t cob_id, pdo_mapping_param mapping[], int num_params) {
     int error = 0;
     uint16_t rpdo_index = 0x1400 + num_rpdos;
@@ -65,6 +74,7 @@ extern int pdo_add_tpdo(co_node *node, uint16_t cob_id, uint16_t inhibit, uint16
         log_write_ln("pdo: ERROR add TPDO %04Xh failed", cob_id);
     } else {
         num_tpdos++;
+        tpdo_counter[num_tpdos - 1] = event;
         log_write_ln("pdo: add TPDO %04Xh OK", cob_id);
     }
     return error;
@@ -140,49 +150,54 @@ extern int pdo_process_rpdo(co_node *node, can_message *msg) {
 }
 extern int pdo_send_tpdo(co_node *node, uint32_t tick_count) {
     int error = 0;
+    // Get time passed since last cycle
+    int32_t time_diff = tick_count - prev_tick_count;
+    prev_tick_count = tick_count;
+    if (time_diff < 0) {
+        // The tick count overflowed - dirty fix:
+        time_diff = tick_count;
+    }
     for (int i = 0; i < num_tpdos; i++) {
-        uint16_t index = 0x1800 + i;
-        uint32_t data;
-        uint8_t msg_data[8];
-        uint16_t tpdo_cob_id;
-        uint8_t msg_can_be_sent = 0;
-        uint8_t msg_num_bytes = 0;
-        // see if this TPDO is enabled
-        od_result result = od_read(node->od, index, 1, &data);
-        if (result != OD_RESULT_OK) {
-            error = 1;
-            log_write_ln("pdo: pdo_send_tpdo: ERROR: could not read OD %04Xh:%d", index, 1);
-        }
-        if (!error) {
-            //  If bit 31 of sub index 1 is 1, then the PDO is diabled
-            if ((data & (1 << 31)) > 0) {
-                // This TPDO is diabled, move on to the next one
-                continue;
-            } else {
-                // This TPDO is enabled, save the COB ID, which is 11 bits long
-                tpdo_cob_id = data & 0x7FF;
-            }
-        }
-        if (!error) {
-            // See event timer has reached
-            result = od_read(node->od, index, 5, &data);
+        tpdo_counter[i] -= time_diff;
+        if (tpdo_counter[i] <= 0) {
+            // The counter reached zero or negative. It's time to send the TPDO.
+            uint16_t index = 0x1800 + i;
+            uint32_t data;
+            uint8_t msg_data[8];
+            uint16_t tpdo_cob_id;
+            uint8_t msg_num_bytes = 0;
+            uint16_t event_time = 0;
+            // See if this TPDO is enabled
+            od_result result = od_read(node->od, index, 1, &data);
             if (result != OD_RESULT_OK) {
                 error = 1;
-                log_write_ln("pdo: pdo_send_tpdo: ERROR: could not read OD %04Xh:%d", index, 5);
+                log_write_ln("pdo: pdo_send_tpdo: ERROR: could not read OD %04Xh:%d", index, 1);
             }
-        }
-        if (!error) {
-            // data contains event timer in milliseconds. If at least that much time has passed since last
-            // TPDO was sent, then we can send again
-            if (tick_count - previous_tpdo_tick >= data) {
-                msg_can_be_sent = 1;
+            if (!error) {
+                //  If bit 31 of sub index 1 is 1, then the PDO is diabled
+                if ((data & (1 << 31)) > 0) {
+                    // This TPDO is diabled, move on to the next one
+                    continue;
+                } else {
+                    // This TPDO is enabled, save the COB ID, which is 11 bits long
+                    tpdo_cob_id = data & 0x7FF;
+                }
+            }
+            if (!error) {
+                // Get this TPDO's event time
+                result = od_read(node->od, index, 5, &data);
+                if (result != OD_RESULT_OK) {
+                    error = 1;
+                    log_write_ln("pdo: pdo_send_tpdo: ERROR: could not read OD %04Xh:%d", index, 5);
+                } else {
+                    event_time = (uint16_t)data;
+                }
+            }
+            if (!error) {
                 // Map TPDO to CAN message data
                 error = map_tpdo(node, i, msg_data, &msg_num_bytes);
-                previous_tpdo_tick = tick_count;
             }
-        }
-        if (!error) {
-            if (msg_can_be_sent) {
+            if (!error) {
                 // Send the TPDO message
                 can_message msg;
                 msg.data = msg_data;
@@ -190,9 +205,18 @@ extern int pdo_send_tpdo(co_node *node, uint32_t tick_count) {
                 msg.id = tpdo_cob_id;
                 can_bus_send_message(&msg);
             }
-        }
-        if (error) {
-            log_write_ln("pdo: pdo_send_tpdo FAILED");
+            if (error) {
+                log_write_ln("pdo: pdo_send_tpdo FAILED");
+            }
+            
+            // Restart the counter
+            tpdo_counter[i] += event_time;
+            if (tpdo_counter[i] < 0) {
+                // If the time since last cycle was really long and TPDO counter
+                // still shows negative - make it zero so that many TPDO's won't
+                // be sent at once:
+                tpdo_counter[i] = 0;
+            }
         }
     }
     return error;

@@ -55,7 +55,7 @@ extern int test_rpdo_run(void) {
     data[0] = 11;
     data[1] = 22;
     data[2] = 33;
-    error = test_pdo(&node, 0x181, rpdo_params1, UTILS_ARRAY_SIZE(rpdo_params1), rpdo_params1_expect);
+    error = test_pdo(&node, 0x201, rpdo_params1, UTILS_ARRAY_SIZE(rpdo_params1), rpdo_params1_expect);
     
     // Test some complex RPDO parameters // 0x169A227263526646 (6, 0x4CC8, 0x6A, 0x98, 0x13444E, 0x16)
     data[0] = 0x46;
@@ -66,7 +66,7 @@ extern int test_rpdo_run(void) {
     data[5] = 0x22;
     data[6] = 0x9A;
     data[7] = 0x16;
-    error = test_pdo(&node, 0x182, rpdo_params2, UTILS_ARRAY_SIZE(rpdo_params2), rpdo_params2_expect);
+    error = test_pdo(&node, 0x301, rpdo_params2, UTILS_ARRAY_SIZE(rpdo_params2), rpdo_params2_expect);
     return error;
 }
 

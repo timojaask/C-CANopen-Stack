@@ -97,7 +97,7 @@ static pdo_mapping_param node1_tpdo2_params[] = {
     {0x2009, 3, 8}
 };
 /****************************** Local Prototypes *****************************/
-static int initialize_nodes(void);
+static int initialize_nodes(uint32_t tick_count);
 static void master_can_message_received(can_message *msg);
 static void node1_can_message_received(can_message *msg);
 /****************************** Global Functions *****************************/
@@ -112,7 +112,7 @@ extern int test_appcycle_run(void) {
     message.data_len = 8;
     
     // Initialize CANopen nodes
-    error = initialize_nodes();
+    error = initialize_nodes(tick_count_ms);
     
     can_bus_register_message_received_handler(master_can_message_received);
     can_bus_register_message_received_handler(node1_can_message_received);
@@ -123,9 +123,6 @@ extern int test_appcycle_run(void) {
         uint8_t sdo_set_heartbeat1_sent = 0;
         
         for (tick_count_ms = 0; tick_count_ms < 1000 * test_duration_sec; tick_count_ms += interval_ms) {
-            delay_ms(interval_ms);
-            // Run nodes' CANopen stack on each cycle
-            co_stack_do_tasks(&node1, tick_count_ms);
             // Transmit some PDO's
             // Send some SDO commands
             if (!sdo_set_heartbeat1_sent) {
@@ -140,6 +137,9 @@ extern int test_appcycle_run(void) {
                 nmt_operational1_sent = 1;
             }
             // [PDO reception is handled in receive function and results should be somehow linked with this]
+            delay_ms(interval_ms);
+            // Run nodes' CANopen stack on each cycle
+            co_stack_do_tasks(&node1, tick_count_ms);
         }
     }
     
@@ -153,13 +153,14 @@ extern int test_appcycle_run(void) {
     return error;
 }
 /****************************** Local Functions ******************************/
-static int initialize_nodes(void) {
+static int initialize_nodes(uint32_t tick_count) {
     int error = 0;
     node1.node_id = node1_node_id;
     node1.state = nmt_state_boot_up;
     node1.od = &od1;
     od_initialize(node1.od);
     // Add some TPDO and RPDO mapping
+    pdo_initialize(tick_count);
     error |= pdo_add_tpdo(&node1, node1_tpdo1_cob_id, 10, node1_tpdo1_interval_ms, node1_tpdo1_params, UTILS_ARRAY_SIZE(node1_tpdo1_params));
     error |= pdo_add_tpdo(&node1, node1_tpdo2_cob_id, 10, node1_tpdo2_interval_ms, node1_tpdo2_params, UTILS_ARRAY_SIZE(node1_tpdo2_params));
     error |= pdo_add_rpdo(&node1, node1_rpdo1_cob_id, node1_rpdo1_params, UTILS_ARRAY_SIZE(node1_rpdo1_params));
@@ -178,11 +179,11 @@ static void master_can_message_received(can_message *msg) {
     if (test_running) {
         // Use this for catching TPDOs from the slave
         if (msg->id == node1_tpdo1_cob_id) {
-            log_write_ln("test_appcycle: node1 TPDO1 received");
+            log_write_ln("[%04d] test_appcycle: node1 TPDO1 received. COB-ID: %Xh", tick_count_ms, msg->id);
         } else if (msg->id == node1_tpdo2_cob_id) {
-            log_write_ln("test_appcycle: node1 TPDO2 received");
+            log_write_ln("[%04d] test_appcycle: node1 TPDO2 received. COB-ID: %Xh", tick_count_ms, msg->id);
         } else if (msg->id == 0x700 + node1.node_id) {
-            log_write_ln("test_appcycle: node1 heartbeat");
+            log_write_ln("[%04d] test_appcycle: node1 heartbeat", tick_count_ms);
             // This is heard beat from the slave node
             nmt_master_process_heartbeat(msg);
         }

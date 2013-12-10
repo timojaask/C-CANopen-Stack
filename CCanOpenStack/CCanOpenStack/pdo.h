@@ -21,6 +21,7 @@ typedef struct {
 } pdo_mapping_param;
 
 /***************************** Global Prototypes *****************************/
+extern void pdo_initialize(uint32_t tick_count);
 /**
  * @brief Add RPDO mapping to the object dictionary in order to enable receiving the given PDO.
  * @param node CANopen node, to which the RPDO mapping will be added.

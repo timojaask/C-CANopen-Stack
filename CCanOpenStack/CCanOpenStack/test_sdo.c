@@ -77,7 +77,8 @@ extern int test_sdo_run(void) {
 }
 
 /****************************** Local Functions ******************************/
-static void test_download_request(uint16_t index, uint8_t sub_index, uint32_t data) {
+static void test_download_request(uint16_t index, uint8_t sub_index, uint32_t data)
+{
     next_is_from_client = 1;
     next_is_from_server = 0;
     next_client_command = sdo_command_client_download_init;
@@ -92,7 +93,8 @@ static void test_download_request(uint16_t index, uint8_t sub_index, uint32_t da
     log_write_ln("test_sdo: download request: obj:%04Xh:%d data:%04Xh", index, sub_index, data);
     can_bus_send_message(&next_message);
 }
-static void test_download_response(uint16_t index, uint8_t sub_index) {
+static void test_download_response(uint16_t index, uint8_t sub_index)
+{
     next_is_from_client = 0;
     next_is_from_server = 1;
     next_server_command = sdo_command_server_download_init;
@@ -107,7 +109,8 @@ static void test_download_response(uint16_t index, uint8_t sub_index) {
     log_write_ln("test_sdo: download response: obj:%04Xh:%d data:%04Xh", index, sub_index);
     can_bus_send_message(&next_message);
 }
-static void test_upload_request(uint16_t index, uint8_t sub_index) {
+static void test_upload_request(uint16_t index, uint8_t sub_index)
+{
     next_is_from_client = 1;
     next_is_from_server = 0;
     next_client_command = sdo_command_client_upload_init;
@@ -122,7 +125,8 @@ static void test_upload_request(uint16_t index, uint8_t sub_index) {
     log_write_ln("test_sdo: upload request: obj:%04Xh:%d data:%04Xh", index, sub_index);
     can_bus_send_message(&next_message);
 }
-static void test_upload_response(uint16_t index, uint8_t sub_index, uint32_t data) {
+static void test_upload_response(uint16_t index, uint8_t sub_index, uint32_t data)
+{
     next_is_from_client = 0;
     next_is_from_server = 1;
     next_server_command = sdo_command_server_upload_init;
@@ -137,7 +141,8 @@ static void test_upload_response(uint16_t index, uint8_t sub_index, uint32_t dat
     log_write_ln("test_sdo: upload response: obj:%04Xh:%d data:%04Xh", index, sub_index, data);
     can_bus_send_message(&next_message);
 }
-static void test_client_abort(uint16_t index, uint8_t sub_index, sdo_abort_code abort_code) {
+static void test_client_abort(uint16_t index, uint8_t sub_index, sdo_abort_code abort_code)
+{
     next_is_from_client = 1;
     next_is_from_server = 0;
     next_client_command = sdo_command_client_abort_transfer;
@@ -152,7 +157,8 @@ static void test_client_abort(uint16_t index, uint8_t sub_index, sdo_abort_code 
     log_write_ln("test_sdo: client abort transfer: obj:%04Xh:%d data:%04Xh", index, sub_index, abort_code);
     can_bus_send_message(&next_message);
 }
-static void test_server_abort(uint16_t index, uint8_t sub_index, sdo_abort_code abort_code) {
+static void test_server_abort(uint16_t index, uint8_t sub_index, sdo_abort_code abort_code)
+{
     next_is_from_client = 0;
     next_is_from_server = 1;
     next_server_command = sdo_command_server_abort_transfer;
@@ -168,140 +174,205 @@ static void test_server_abort(uint16_t index, uint8_t sub_index, sdo_abort_code 
     can_bus_send_message(&next_message);
 }
 
-static void message_received_handler(can_message *message) {
-    if (test_running) {
-        if (next_is_from_client) {
+static void message_received_handler(can_message *message)
+{
+    if (test_running)
+    {
+        if (next_is_from_client)
+        {
             sdo_client_command r_command = sdo_get_client_command(message);
-            if (r_command == next_client_command) {
-                if (r_command == sdo_command_client_download_init) {
+            if (r_command == next_client_command)
+            {
+                if (r_command == sdo_command_client_download_init)
+                {
                     // Download init command
                     check_expedited_transfer(message);
-                } else if (r_command == sdo_command_client_upload_init) {
+                }
+                else if (r_command == sdo_command_client_upload_init)
+                {
                     // Upload init command
                     check_multiplexer_transfer(message);
-                } else if (r_command == sdo_command_client_abort_transfer) {
+                }
+                else if (r_command == sdo_command_client_abort_transfer)
+                {
                     // Abort transfer command
                     check_abort_transfer(message);
-                } else {
+                }
+                else
+                {
                     // Other client command
                     log_write_ln("test_sdo: test not implemented");
                     error = 1;
                 }
-            } else {
+            }
+            else
+            {
                 log_write_ln("test_sdo: wrong command");
                 error = 1;
             }
-        } else if (next_is_from_server) {
+        }
+        else if (next_is_from_server)
+        {
             // From server
             sdo_server_command r_command = sdo_get_server_command(message);
-            if (r_command == next_server_command) {
-                if (r_command == sdo_command_server_download_init) {
+            if (r_command == next_server_command)
+            {
+                if (r_command == sdo_command_server_download_init)
+                {
                     // Download init command
                     check_multiplexer_transfer(message);
-                } else if (r_command == sdo_command_server_upload_init) {
+                }
+                else if (r_command == sdo_command_server_upload_init)
+                {
                     // Upload init command
                     check_expedited_transfer(message);
-                } else if (r_command == sdo_command_server_abort_transfer) {
+                }
+                else if (r_command == sdo_command_server_abort_transfer)
+                {
                     // Abort transfer command
                     check_abort_transfer(message);
-                } else {
+                }
+                else
+                {
                     // Other server command
                     log_write_ln("test_sdo: test not implemented");
                     error = 1;
                 }
-            } else {
+            }
+            else
+            {
                 log_write_ln("test_sdo: wrong command");
                 error = 1;
             }
-        } else {
+        }
+        else
+        {
             log_write_ln("test_sdo: test setup error");
             error = 1;
         }
     }
 }
 
-static void check_expedited_transfer(can_message *message) {
+static void check_expedited_transfer(can_message *message)
+{
     uint8_t r_expedited = sdo_get_expedited_bit(message);
-    if (r_expedited == next_is_expedited) {
+    if (r_expedited == next_is_expedited)
+    {
         uint8_t r_size_indicated = sdo_get_size_indicated_bit(message);
-        if (r_size_indicated == next_is_size_indicated) {
-            if (r_expedited && r_size_indicated) {
+        if (r_size_indicated == next_is_size_indicated)
+        {
+            if (r_expedited && r_size_indicated)
+            {
                 // Expedited
                 uint8_t r_size = sdo_get_expedited_data_size(message);
-                if (r_size == next_data_size) {
-                    if (check_multiplexer(message) == 0) {
+                if (r_size == next_data_size)
+                {
+                    if (check_multiplexer(message) == 0)
+                    {
                         uint32_t r_data = sdo_get_expedited_data(message);
-                        if (r_data == next_expedited_data) {
+                        if (r_data == next_expedited_data)
+                        {
                             // OK
                             log_write_ln("test_sdo: download init request OK");
-                        } else {
+                        }
+                        else
+                        {
                             log_write_ln("test_sdo: wrong data");
                             error = 1;
                         }
                     }
-                } else {
+                }
+                else
+                {
                     log_write_ln("test_sdo: wrong data size");
                     error = 1;
                 }
-            } else if (!r_expedited && !r_size_indicated) {
+            }
+            else if (!r_expedited && !r_size_indicated)
+            {
                 // Not expedited
                 log_write_ln("test_sdo: test not implemented");
                 error = 1;
-            } else {
+            }
+            else
+            {
                 log_write_ln("test_sdo: test setup error");
                 error = 1;
             }
-        } else {
+        }
+        else
+        {
             log_write_ln("test_sdo: wrong size indicated");
             error = 1;
         }
-    } else {
+    }
+    else
+    {
         log_write_ln("test_sdo: wrong expedited");
         error = 1;
     }
 }
 
-static void check_multiplexer_transfer(can_message *message) {
+static void check_multiplexer_transfer(can_message *message)
+{
     uint16_t r_index = sdo_get_index(message);
-    if (r_index == next_index) {
+    if (r_index == next_index)
+    {
         uint8_t r_sub_index = sdo_get_sub_index(message);
-        if (r_sub_index == next_sub_index) {
+        if (r_sub_index == next_sub_index)
+        {
             // OK
             log_write_ln("test_sdo: upload init request OK");
-        } else {
+        }
+        else
+        {
             log_write_ln("test_sdo: wrong sub index");
             error = 1;
         }
-    } else {
+    }
+    else
+    {
         log_write_ln("test_sdo: wrong index");
         error = 1;
     }
 }
 
-static void check_abort_transfer(can_message *message) {
-    if (check_multiplexer(message) == 0) {
+static void check_abort_transfer(can_message *message)
+{
+    if (check_multiplexer(message) == 0)
+    {
         uint32_t r_data = sdo_get_expedited_data(message);
-        if (r_data == next_expedited_data) {
+        if (r_data == next_expedited_data)
+        {
             // OK
             log_write_ln("test_sdo: abort transfer OK");
-        } else {
+        }
+        else
+        {
             log_write_ln("test_sdo: wrong error code");
             error = 1;
         }
     }
 }
 
-static uint8_t check_multiplexer(can_message *message) {
+static uint8_t check_multiplexer(can_message *message)
+{
     uint16_t r_index = sdo_get_index(message);
-    if (r_index == next_index) {
+    if (r_index == next_index)
+    {
         uint8_t r_sub_index = sdo_get_sub_index(message);
-        if (r_sub_index == next_sub_index) {
+        if (r_sub_index == next_sub_index)
+        {
             // index and sub_index OK
-        } else {
+        }
+        else
+        {
             log_write_ln("test_sdo: wrong sub index");
             error = 1;
         }
-    } else {
+    }
+    else
+    {
         log_write_ln("test_sdo: wrong index");
         error = 1;
     }

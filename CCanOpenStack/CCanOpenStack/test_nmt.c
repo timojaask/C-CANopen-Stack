@@ -44,7 +44,8 @@ static void slave_reset_communication(void);
 static void slave_reset_node(void);
 
 /****************************** Global Functions *****************************/
-extern int test_nmt_run(void) {
+extern int test_nmt_run(void)
+{
     test_running = 1;
     error = 0;
     // Prepare test slave node
@@ -97,14 +98,19 @@ extern int test_nmt_run(void) {
 }
 
 /****************************** Local Functions ******************************/
-static void set_heartbeat_interval(uint32_t interval) {
+static void set_heartbeat_interval(uint32_t interval)
+{
     od_result result = od_write(slave_node.od, 0x1017, 0, 100);
-    if (interval == 0) {
+    if (interval == 0)
+    {
         heartbeat_enabled = 0;
-    } else {
+    }
+    else
+    {
         heartbeat_enabled = 1;
     }
-    if (result != OD_RESULT_OK) {
+    if (result != OD_RESULT_OK)
+    {
         error = 1;
         log_write_ln("test_nmt: ERROR: setting heartbeat interval failed");
     }
@@ -121,11 +127,13 @@ static void set_heartbeat_interval(uint32_t interval) {
  * @param command The NMT command to be tested
  * @note This function sets a file variable 'error' if error occurs
  */
-static void test_nmt_command(nmt_command command) {
+static void test_nmt_command(nmt_command command)
+{
     state_changed_fired = 0;
     reset_comm_called = 0;
     reset_node_called = 0;
-    switch (command) {
+    switch (command)
+    {
         case nmt_command_operational:
             next_state = nmt_state_operational;
             break;
@@ -149,22 +157,31 @@ static void test_nmt_command(nmt_command command) {
     nmt_master_send_command(slave_node.node_id, command);
     // At this point, since the test system is not multithreaded, the nmt command should be procesed and heartbeat sent by the slave node and then processed by the master node.
     // Check master node to see if correct heartbeat was received
-    if (heartbeat_enabled) {
+    if (heartbeat_enabled)
+    {
         check_node_state_from_master(&slave_node, next_state);
-        if (state_changed_fired == 0 && reset_comm_called == 0 && reset_node_called == 0 && heartbeat_enabled == 1) {
+        if (state_changed_fired == 0 && reset_comm_called == 0 && reset_node_called == 0 && heartbeat_enabled == 1)
+        {
             error = 1;
             log_write_ln("test_nmt: ERROR: either heartbeat not received or slave state changed didn't fire or both");
         }
-        if (reset_node_called && command != nmt_command_reset_node) {
+        if (reset_node_called && command != nmt_command_reset_node)
+        {
             log_write_ln("test_nmt: ERROR: slave reset node was called, event thought command was %d", command);
             error = 1;
-        } else if (command == nmt_command_reset_node && reset_node_called == 0) {
+        }
+        else if (command == nmt_command_reset_node && reset_node_called == 0)
+        {
             log_write_ln("test_nmt: ERROR: command was reset node, but slate reset node function was not called", command);
             error = 1;
-        } else if (reset_comm_called && command != nmt_command_reset_communication) {
+        }
+        else if (reset_comm_called && command != nmt_command_reset_communication)
+        {
             log_write_ln("test_nmt: ERROR: slave reset comm was called, event thought command was %d", command);
             error = 1;
-        } else if (command == nmt_command_reset_communication && reset_comm_called == 0) {
+        }
+        else if (command == nmt_command_reset_communication && reset_comm_called == 0)
+        {
             log_write_ln("test_nmt: ERROR: command was reset communication, but slate reset comm function was not called", command);
             error = 1;
         }
@@ -180,36 +197,55 @@ static void test_nmt_command(nmt_command command) {
  * @param expected_state The expected NMT state of the selected node.
  * @note This function sets a file variable 'error' if error occurs
  */
-static void check_node_state_from_master(co_node *node, nmt_state expected_state) {
-    if (nmt_master_num_nodes() == 1) {
-        if (nmt_master_node_list()[0].node_id == slave_node.node_id) {
+static void check_node_state_from_master(co_node *node, nmt_state expected_state)
+{
+    if (nmt_master_num_nodes() == 1)
+    {
+        if (nmt_master_node_list()[0].node_id == slave_node.node_id)
+        {
             // OK - the correct node ID was saved
-            if (nmt_master_node_list()[0].state == expected_state) {
+            if (nmt_master_node_list()[0].state == expected_state)
+            {
                 // OK - the correct state was received and saved
                 log_write_ln("test_nmt: state %d OK", expected_state);
-            } else {
+            }
+            else
+            {
                 error = 1;
                 log_write_ln("test_nmt: ERROR: wrong nmt state saved to master's node list");
             }
-        } else {
+        }
+        else
+        {
             error = 1;
             log_write_ln("test_nmt: ERROR: wrong node ID saved to master's node list");
         }
-    } else {
+    }
+    else
+    {
         error = 1;
     }
 }
-static void check_node_state_from_slave(co_node *node, nmt_state expected_state) {
-    if (node->state != expected_state) {
+
+static void check_node_state_from_slave(co_node *node, nmt_state expected_state)
+{
+    if (node->state != expected_state)
+    {
         error = 1;
         log_write_ln("test_nmt: ERROR: wrong nmt state saved to slave node");
-    } else {
+    }
+    else
+    {
         log_write_ln("test_nmt: state %d OK", expected_state);
     }
 }
-static void slave_message_received_handler(can_message *message) {
-    if (test_running) {
-        if (message->id == 0 || message->id == slave_node.node_id) {
+
+static void slave_message_received_handler(can_message *message)
+{
+    if (test_running)
+    {
+        if (message->id == 0 || message->id == slave_node.node_id)
+        {
             // This is NMT command, either broadcase or directed to this node
             nmt_slave_process_command(message, &slave_node);
             // Send heartbeat
@@ -217,31 +253,45 @@ static void slave_message_received_handler(can_message *message) {
         }
     }
 }
-static void slave_state_changed_handler(nmt_state state) {
-    if (test_running) {
-        if (state == next_state) {
+
+static void slave_state_changed_handler(nmt_state state)
+{
+    if (test_running)
+    {
+        if (state == next_state)
+        {
             state_changed_fired = 1;
-        } else {
+        }
+        else
+        {
             log_write_ln("test_nmt: state_changed: wrong state: got %d, expected %d", (int)state, (int)next_state);
             error = 1;
         }
     }
 }
-static void slave_reset_communication(void) {
+
+static void slave_reset_communication(void)
+{
     slave_node.state = nmt_state_pre_operational;
     reset_comm_called = 1;
     // Send heartbeat
     nmt_slave_send_heartbeat(&slave_node, tick_count);
 }
-static void slave_reset_node(void) {
+
+static void slave_reset_node(void)
+{
     slave_node.state = nmt_state_pre_operational;
     reset_node_called = 1;
     // Send heartbeat
     nmt_slave_send_heartbeat(&slave_node, tick_count);
 }
-static void master_message_received_handler(can_message *message) {
-    if (test_running) {
-        if (message->id == 0x700 + slave_node.node_id) {
+
+static void master_message_received_handler(can_message *message)
+{
+    if (test_running)
+    {
+        if (message->id == 0x700 + slave_node.node_id)
+        {
             // This is heard beat from the slave node
             nmt_master_process_heartbeat(message);
         }

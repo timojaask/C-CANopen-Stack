@@ -19,22 +19,29 @@ static void (*message_received_handlers[MAX_HANDLERS])(can_message *message);
 static void message_received(can_message *message);
 
 /****************************** Global Functions *****************************/
-extern void can_bus_send_message(can_message *message) {
+extern void can_bus_send_message(can_message *message)
+{
     message_received(message);
 }
-extern int can_bus_register_message_received_handler(void (*handler_function)(can_message *message)) {
+extern int can_bus_register_message_received_handler(void (*handler_function)(can_message *message))
+{
     int error = 0;
-    if (num_handlers < MAX_HANDLERS) {
+    if (num_handlers < MAX_HANDLERS)
+    {
         message_received_handlers[num_handlers++] = handler_function;
-    } else {
+    }
+    else
+    {
         error = 1;
     }
     return error;
 }
 
 /****************************** Local Functions ******************************/
-static void message_received(can_message *message) {
-    for (int i = 0; i < num_handlers; i++) {
+static void message_received(can_message *message)
+{
+    for (int i = 0; i < num_handlers; i++)
+    {
         (*message_received_handlers[i])(message);
     }
 }

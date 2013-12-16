@@ -11,7 +11,8 @@
 #include "log.h"
 
 /****************************** Global Functions *****************************/
-extern void log_write_ln(const char *format, ...) {
+extern void log_write_ln(const char *format, ...)
+{
     char buffer[256];
     va_list args;
     va_start (args, format);
@@ -19,7 +20,8 @@ extern void log_write_ln(const char *format, ...) {
     printf("%s\n", buffer);
     va_end (args);
 }
-extern void log_write(const char *format, ...) {
+extern void log_write(const char *format, ...)
+{
     char buffer[256];
     va_list args;
     va_start (args, format);

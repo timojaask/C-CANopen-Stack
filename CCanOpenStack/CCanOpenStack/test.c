@@ -18,7 +18,8 @@
 #include "test_sdo_server.h"
 
 /****************************** Global Functions *****************************/
-extern void test_run_all_tests(void) {
+extern void test_run_all_tests(void)
+{
     int error = 0;
     error |= test_can_bus_run();
     error |= test_od_run();
@@ -28,9 +29,12 @@ extern void test_run_all_tests(void) {
     error |= test_rpdo_run();
     error |= test_tpdo_run();
     error |= test_appcycle_run();
-    if (!error) {
+    if (!error)
+    {
         log_write_ln("test: ALL OK");
-    } else {
+    }
+    else
+    {
         log_write_ln("test: ERRORS");
     }
 }

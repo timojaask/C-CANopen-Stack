@@ -16,7 +16,7 @@
 
 /***************************** Global Prototypes *****************************/
 extern void nmt_master_send_command(uint8_t node_id, nmt_command command);
-extern void nmt_master_process_heartbeat(can_message *message);
+extern nmt_state nmt_master_process_heartbeat(can_message *message);
 extern int nmt_master_num_nodes(void);
 extern co_node *nmt_master_node_list(void);
 

@@ -25,7 +25,8 @@ static void test_message_received_handler2(can_message *message);
 static void check_received_message(can_message *message, int handler_num);
 
 /****************************** Global Functions *****************************/
-extern int test_can_bus_run(void) {
+extern int test_can_bus_run(void)
+{
     test_running = 1;
     error |= can_bus_register_message_received_handler(test_message_received_handler1);
     error |= can_bus_register_message_received_handler(test_message_received_handler2);
@@ -39,45 +40,58 @@ extern int test_can_bus_run(void) {
 }
 
 /****************************** Local Functions ******************************/
-static void send_message(uint16_t id, uint8_t len, uint32_t data) {
+static void send_message(uint16_t id, uint8_t len, uint32_t data)
+{
     next_id = id;
     next_len = len;
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++)
+    {
         next_data[i] = (data >> (i*8)) & 0xFF;
     }
     can_message msg = {.id = next_id, .data_len = next_len, .data = next_data};
     can_bus_send_message(&msg);
 }
-static void test_message_received_handler1(can_message *message) {
+static void test_message_received_handler1(can_message *message)
+{
     check_received_message(message, 1);
 
 }
-static void test_message_received_handler2(can_message *message) {
+static void test_message_received_handler2(can_message *message)
+{
     check_received_message(message, 2);
 }
-static void check_received_message(can_message *message, int handler_num) {
-    if (test_running) {
-        if (message->id != next_id) {
+static void check_received_message(can_message *message, int handler_num)
+{
+    if (test_running)
+    {
+        if (message->id != next_id)
+        {
             error = 1;
             log_write("test_can_bus: message received handler %d: wrong id, id:%Xh, len:%d, data:", handler_num, message->id, message->data_len);
         }
-        if (!error) {
-            if (message->data_len != next_len) {
+        if (!error)
+        {
+            if (message->data_len != next_len)
+            {
                 error = 1;
                 log_write("test_can_bus: message received handler %d: wrong len, id:%Xh, len:%d, data:", handler_num, message->id, message->data_len);
             }
         }
-        if (!error) {
+        if (!error)
+        {
             // Compare each byte in data
-            for (int i = 0; i < message->data_len; i++) {
-                if (message->data[i] != next_data[i]) {
+            for (int i = 0; i < message->data_len; i++)
+            {
+                if (message->data[i] != next_data[i])
+                {
                     error = 1;
                     log_write("test_can_bus: message received handler %d: wrong data, id:%Xh, len:%d, data:", handler_num, message->id, message->data_len);
                     break;
                 }
             }
         }
-        if (!error) {
+        if (!error)
+        {
             log_write("test_can_bus: receive %d OK id:%Xh, len:%d, data:", handler_num, message->id, message->data_len);
         }
         print_message_data(message);

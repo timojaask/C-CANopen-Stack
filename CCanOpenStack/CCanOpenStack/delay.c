@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include "delay.h"
 
-extern void delay_ms(uint32_t milliseconds) {
+extern void delay_ms(uint32_t milliseconds)
+{
     usleep(milliseconds * 1000);
 }

@@ -42,7 +42,8 @@ static uint8_t data[8];
 static int test_pdo(co_node *node, int cob_id, pdo_mapping_param *params, int num_params, uint32_t *expected);
 
 /****************************** Global Functions *****************************/
-extern int test_rpdo_run(void) {
+extern int test_rpdo_run(void)
+{
     int error = 0;
     object_dictionary od;
     od_initialize(&od);
@@ -71,9 +72,11 @@ extern int test_rpdo_run(void) {
 }
 
 /****************************** Local Functions ******************************/
-static int test_pdo(co_node *node, int cob_id, pdo_mapping_param *params, int num_params, uint32_t *expected) {
+static int test_pdo(co_node *node, int cob_id, pdo_mapping_param *params, int num_params, uint32_t *expected)
+{
     int error = pdo_add_rpdo(node, cob_id, params, num_params);
-    if (!error) {
+    if (!error)
+    {
         // Send some data and run process RPDO function, which should write data into object dictionary
         can_message msg;
         msg.id = cob_id;
@@ -81,22 +84,30 @@ static int test_pdo(co_node *node, int cob_id, pdo_mapping_param *params, int nu
         msg.data = data;
         error |= pdo_process_rpdo(node, &msg);
     }
-    if (!error) {
+    if (!error)
+    {
         // See if data was written into object dictionary properly
-        for (int i = 0; i < num_params; i++) {
+        for (int i = 0; i < num_params; i++)
+        {
             uint16_t index = params[i].index;
             uint8_t sub_index = params[i].sub_index;
             uint32_t value;
             od_result result = od_read(node->od, index, sub_index, &value);
-            if (result == OD_RESULT_OK) {
-                if (value == expected[i]) {
+            if (result == OD_RESULT_OK)
+            {
+                if (value == expected[i])
+                {
                     // OK
-                } else {
+                }
+                else
+                {
                     log_write_ln("test_pdo: Value read from OD %04Xh:%d not what was expected (read: %X, expected: %X)", index, sub_index, value, expected[i]);
                     error = 1;
                     break;
                 }
-            } else {
+            }
+            else
+            {
                 log_write_ln("test_pdo: Reading OD %04Xh:%d failed", index, sub_index);
                 error = 1;
                 break;
@@ -104,9 +115,12 @@ static int test_pdo(co_node *node, int cob_id, pdo_mapping_param *params, int nu
         }
     }
     
-    if (error) {
+    if (error)
+    {
         log_write_ln("rpdo test: ERROR: pdo_add_rpdo RPDO param test");
-    } else {
+    }
+    else
+    {
         log_write_ln("rpdo test: RPDO param test OK");
     }
     return error;

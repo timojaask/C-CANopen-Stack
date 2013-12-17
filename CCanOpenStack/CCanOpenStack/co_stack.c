@@ -55,24 +55,25 @@ extern void co_stack_can_message_received_handler(co_node *node, can_message *ms
     }
     else
     {
-        // See if this is an SDO request
-        if (msg->id == rsdo_cob_id)
-        {
-            // SDO request received
-            sdo_server_process_request(msg, node);
-        }
         // See if this is an NMT command
-        else if (msg->id == 0 || msg->id == node->node_id)
+        if (msg->id == 0 || msg->id == node->node_id)
         {
             // This is NMT command, either broadcase or directed to this node
             nmt_slave_process_command(msg, node);
             // Send heartbeat
             nmt_slave_send_heartbeat_immediately(node);
         }
-        // See if this is an RPDO message
-        else
+        else if (node->state == nmt_state_operational || node->state == nmt_state_pre_operational)
         {
-            if (node->state == nmt_state_operational)
+            // See if this is an SDO request
+            if (msg->id == rsdo_cob_id)
+            {
+                // SDO request received
+                sdo_server_process_request(msg, node);
+            }
+            
+            // See if this is an RPDO message
+            else if (node->state == nmt_state_operational)
             {
                 // pdo_process_rpdo automatically makes sure the message is RPDO before processing it,
                 // and if not, the message will be simply ignored.

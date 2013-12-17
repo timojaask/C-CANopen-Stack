@@ -160,6 +160,9 @@ static void process_download_request(can_message *message, co_node *node)
             case OD_RESULT_OBJECT_NOT_FOUND:
                 send_abort_message(index, sub_index, sdo_abort_subindex_does_not_exist, node);
                 break;
+            case OD_RESULT_WRITING_READ_ONLY_OBJECT:
+                send_abort_message(index, sub_index, sdo_abort_write_a_read_only_object, node);
+                break;
             default:
                 log_write_ln("sdo_server: ERROR: unknown od_result %d", (int)result);
                 send_abort_message(index, sub_index, sdo_abort_general_error, node);

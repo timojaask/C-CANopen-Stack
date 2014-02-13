@@ -12,6 +12,7 @@
 #include <stdint.h>
 
 /***************************** Global Definitions ****************************/
+
 typedef enum {
     od_data_type_bool = 1,
     od_data_type_int8 = 2,

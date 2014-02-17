@@ -12,9 +12,16 @@
 #include <stdint.h>
 
 /***************************** Global Definitions ****************************/
+/**
+ * @brief A structure to represents a CAN message. This is not a part of CANopen protocol,
+ * but underlying CAN protocol. This is the data that will be passed around the CAN network.
+ */
 typedef struct {
+    /* @brief The CAN message identifier */
     uint16_t id;
+    /* @brief The length of the message data */
     uint8_t data_len;
+    /* @brief A pointer to CAN message data */
     uint8_t *data;
 } can_message;
 

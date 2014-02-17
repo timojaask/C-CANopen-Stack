@@ -15,6 +15,8 @@ in source files:
 
 
 
+Commenting a function:
+
 /**
  * @brief Short description
  *
@@ -23,3 +25,17 @@ in source files:
  * @param param1 Parameter description
  * @return Return value description
  */
+static uint8_t do_something(int param1);
+
+Commenting a structure:
+
+/**
+ * @brief A structure to represents a CAN message. This is not a part of CANopen protocol,
+ * but underlying CAN protocol. This is the data that will be passed around the CAN network.
+ */
+typedef struct { ... }
+
+Commenting a variable:
+
+/* @brief The CAN message identifier */
+uint16_t id;

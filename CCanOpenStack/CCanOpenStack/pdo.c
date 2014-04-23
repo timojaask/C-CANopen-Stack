@@ -16,6 +16,7 @@
 /****************************** Local Variables ******************************/
 static int num_rpdos = 0;
 static int num_tpdos = 0;
+// tpdo_counter contains event time countdown for each registered TPDO
 static int32_t tpdo_counter[MAX_TPDOS];
 static uint32_t prev_tick_count = 0;
 

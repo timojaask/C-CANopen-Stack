@@ -1,4 +1,7 @@
 TODO:
+- Move TPDO counters into node. At the moment the system can only have node, because TPDO counters are shared.
+- Revise the code and see what needs to be changed in order to support multiple nodes per system.
+- In co_stack.h, co_stack_initialize() add support for initializing SDO client, right now it automatically initializes SDO server.
 - Function that puts node into operational state if enabled in OD 0x1F80 + test
 - Reset communication and reset device functions. Also add them to nmt_slave.c to be called when appropriated command is received.
 - Implement functions that set the "current_state" variable in nmt_slave.c.
